@@ -1,0 +1,143 @@
+%\VignetteIndexEntry{geneClassifiers and missing probesets}
+\documentclass{article}
+
+\usepackage[letterpaper, portrait, margin=0.8in]{geometry}
+\usepackage{listings}
+\usepackage[colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{amsmath}
+
+
+\lstset{frame=tb,
+    language=R,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    numbers=none,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3
+}
+
+\usepackage{algorithm,algorithmic}
+\begin{document} 
+\title{Handling missing probe-sets in a linear gene classifier}
+\author{Rowan Kuiper, Erasmus MC Cancer Institute, Rotterdam, the Netherlands.}
+\date{January 11 2016}
+\maketitle
+
+In multiple myeloma - a plasma cell cancer - linear models (e.g. EMC92) can be used to estimate a patients' prognosis. In case the model outcome exceeds a specific value $t$ (i.e. a dichotomizing threshold) the subject is classified as high-risk.
+
+Let the risk model outcome be $\boldsymbol{Y}$, which estimate is predicted as $\boldsymbol{\hat{Y }} = \boldsymbol{X}\boldsymbol{\beta}$ based on the $n \times m$ gene expression matrix $\boldsymbol{X}$ and classifier weight vector $\boldsymbol{\beta}$.
+Now consider the situation of interest, where only a subset of covariates in  $\boldsymbol{X}$ indexed by $j \in \left\{1..m\right\}$  is non-missing. Often, missing covariates are simply discarded from the prediction such that the reduced model is $\hat{\boldsymbol{Y}}^R = \boldsymbol{X}_{.j} \boldsymbol{\beta}_j$ . However this may severely disrupt the results.
+
+As will be illustrated, the reduced predictor will most probably i) be biased, resulting in a wrong interpretation of the (unbiased) dichotomizing threshold ii) have an altered variance compared to the complete predictor and iii) a reduced accuracy due to loss of information. Instead of applying the reduced model, is there a more reliably way of discarding variables that yields an outcome which is better comparable to the complete model?
+
+\section{Effects of discarding variables from a predictor}
+First, applying a reduced model by simply discarding variables from a predictor will inherently cause problems for the interpretation of the dichotomizing threshold. The definition of the complete predictor is thought to enable the identification of a patient subset with increased risk. Discarding variables may remove the characteristic element needed for the identification of specific risk mechanisms thereby reducing the distinctive capacity of the model. It will then likely lead to an altered optimal value of the dichotomizing threshold. However, if the contribution to risk distinction of the discarded variables is limited, the proportion of classified risk groups will be largely unaltered. If the discarded variables have large distinctive capacity but are also highly correlated to other variables in the model, their effects can be modeled in terms of remaining variables, as will be shown. 
+
+Even-though the identified proportion of subjects within risk groups remain largely constant, the corresponding dichotomizing threshold may change due to an altered variance of the outcome for the reduced model compared to the complete model. To illustrate this, consider a simple case of a linear predictor with only two variables: $\hat{y} = x_1\beta_1+x_2\beta_2$. After mean centring and variance scaling of $\boldsymbol{x}$ such that $E[\boldsymbol{x}] = 0$ and $Var[\boldsymbol{x}] = 1$, this will result in $E[\hat{\boldsymbol{y}}] = 0$ and $Var[\hat{\boldsymbol{y}}] = \boldsymbol{\beta} \boldsymbol{\Sigma}\boldsymbol{\beta}^\prime = \beta_1^2+\beta_2^2+\beta_1\beta_2 2Cov(x_1,x_2)$ for $\boldsymbol{\Sigma} = Cov(x_1,x_2)$. Now disregard variable $x_2$ such that we are left with a new - probably less accurate - predictor $\hat{y}^R = x_1\beta_1$ which has $E[\hat{\boldsymbol{y}}^R] = 0$ and $Var[\hat{\boldsymbol{y}}^R] =\beta_1^2$. As long as $Cov(x_1,x_2) \neq -\frac{\beta_2}{2\beta_1}$, the outcome of the reduced predictor has an altered variance compared to the complete predictor. Any dichotomizing threshold $t$ that was applied to the original predictor is not usable any more in the new reduced predictor. 
+
+
+
+\section{Redistribute weightings }
+Consider a situation where there is some non-zero covariance between covariates. Then they can be expressed - at least in part - as a function of each other.  We assume the training set expressions are known. We focus on the situation were there are more training subjects that non-missing covariates to avoid ill defined covariance structures.  
+
+Let $\boldsymbol{X}$ be the $n\times u$ design matrix containing $n$ patients, a single column for the unit intercept vector and the $u-1$ non-missing covariates. Let $\boldsymbol{Z}$ be the $n\times v$ response matrix for the same $n$ patients and $v$ missing covariates. Each covariate $z_{.j}$ can be expressed as a function of $\boldsymbol{X}$ by fitting the linear least square regression $\boldsymbol{\Omega} = \left(\boldsymbol{X}\boldsymbol{X}^T\right)^{-1}\boldsymbol{X}^T \boldsymbol{Z}$. This gives the $v \times u$ weight matrix $\boldsymbol{\Omega}$ in which column $j$ contains the weights to be applied to $\boldsymbol{X}$ in order to obtain the unbiased least square fit onto $z_{.j}$.
+These weights can be used to redistribute the original classifier weights for the missing covariates $\beta(v)$ over the non-missing covariates $\beta(u)$ into $\phi =  \beta(u) + \boldsymbol{\Omega} \beta(v)$. Note that in this notation, there is an intercept in $\beta(u)$ and  $\phi$. Now we determine the reweighted classifier outcome as $\boldsymbol{y}^R = \boldsymbol{X}\boldsymbol{\phi} + \epsilon$ in which some error will arise due to sampling of the training set.
+
+
+\section{Resetting the dichotomizing threshold}
+By excluding covariates, variances of the outcome will alter and thus the optimal dichotomizing threshold will probably has to be changed. This is valid on the assumption that both outcomes will on average contain an unaltered optimal proportion of high-risk patients. Then we can simply reset the dichotomizing threshold to be used for the reweighted  model such that the proportion of patients classified as high-risk in the training set is equal to that of the complete model.
+
+
+\section{Proof of concept}
+To show a proof of concept for reweighting, we define a complete model $\boldsymbol{y} = \boldsymbol{X}\boldsymbol{\beta}$ and a reweighted model $\boldsymbol{y}^R = \boldsymbol{X}^R\boldsymbol{\phi}$. The weights $\boldsymbol{\beta}$ is a vector of length $m$ containing randomly drawn values from $\mathcal{N}\left(\mu=0,\sigma=1\right)$ and $\boldsymbol{X}$ is a multivariate normal distributed $n\times m$ matrix with values drawn from $\mathcal{N}\left(\mu=0,\Sigma\right)$. To construct $\Sigma$ we initially set the diagonal elements to $1$ and randomly draw the off diagonal element from $\mathcal{U}\left(-\rho,\rho\right)$. The nearest positive definite matrix is created by the \textit{nearPD} function from the \textbf{R Matrix} package. 
+
+We set $m=92$, $n=350$ and generate two independent matrices $\boldsymbol{X}_{train}$ and $\boldsymbol{X}_{test}$ with the same covariance structure. Next, $36$ covariates are randomly selected to be assigned as missing. Based on the training set we determine the vector of reweigthed weightings $\phi$ which are validated by their application to the independently generated matrix $\boldsymbol{X}_{test}$.
+
+In Figure \ref{ProofOfPrinciple} it can be seen that the continuous outcome of the reweighed model tend to have better correlation to the complete model, as long as the missing covariates have shared variation to some known covariates. If this is not the case, the estimation error will exceed the increase in performance resulting in reduced correlation.
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[trim=0cm 4.5cm 0cm 6cm, clip=true, scale=0.55]{Figures/ProofOfConcept.pdf}
+\caption{Scatter plots of correlations between the complete and reweighted models (x-axis) and the complete and reduced models (y-axis) as applied on the test data for 1000 independent generations for $\rho = 0$ (left),$\rho = 0.1$ (middle),$\rho = 0.2$ (right) .}
+
+\label{ProofOfPrinciple}
+\end{figure}
+
+
+\section{EMC92}
+To compare the effect of redistributing weights versus excluding covariates completely in a more realistic setting, we make use of the  HOVON65/GMMGHD4 training set and the UAMS-TT2 and UAMS-TT3 test sets which were both profiled using the Affymetrix HG U133 PLUS 2.0 microarray. Expression values within these sets were log2 transformed, mean centred and scaled to unit variance (per probe-set based). 
+
+\subsection{Simulation 1 : All genes}
+\begin{itemize}
+\item Step1: Randomly select 92 probe-sets out of the available 54675, and assign them a weight by picking one from the EMC92 weights.
+\item Step2: Randomly select 36 probe-sets out of the 92 which are to be missing in the TT2 and TT3 test sets.
+\item Step3: Determine $\phi$ for this situation based on the H65 training set. 
+\item Step4: Apply the complete, the reweighted and the reduced model to both test sets.
+\item Step5: Determine the correlation between both the reduced and reweighted versus the complete model outcomes.
+\end{itemize}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[trim=0cm 4.5cm 6cm 6cm, clip=true, scale=0.55]{Figures/Simulation1.pdf}
+\caption{Simulation 1: Scatter plots of correlations between the complete and reweighted models (x-axis) and the complete and reduced models (y-axis) as applied on the UAMS-TT2 (left) and UAMS-TT3 (right) for 1000 randomly selected subsets of 92 genes of which 36 were assumed to be missing in the test set.}
+
+\label{Simulation1}
+\end{figure}
+
+\subsection{Simulation 2 : Only highly expressed genes}
+\begin{itemize}
+\item Step1: Randomly select 92 probe-sets out of the 15610 which are highly expressed ($\mu_{train}>8$) in the training set and assign them a weight by picking one from the EMC92 weights.
+\item Step2: Randomly select 36 probe-sets out of the 92 which are to be missing in the test set.
+\item Step3: Determine $\phi$ for this situation based on the training set. 
+\item Step4: Apply the complete, the reweighted and the reduced model to both test sets.
+\item Step5: Determine the correlation between both the reduced and reweighted versus the complete model outcomes.
+\end{itemize}
+\begin{figure}[H]
+\centering
+\includegraphics[trim=0cm 4.5cm 6cm 6cm, clip=true, scale=0.55]{Figures/Simulation2.pdf}
+\caption{Scatter plots of correlations between the complete and reweighted models (x-axis) and the complete and reduced models (y-axis) as applied on the UAMS-TT2 (left) and UAMS-TT3 (right) for 1000 randomly selected subsets of 92 genes of which 36 were assumed to be missing in the test set. Only highly expressed genes $(\mu_{train}>8)$ have been taken into account.}
+
+\label{Simulation2}
+\end{figure}
+
+\subsection{Simulation 3 : Only the EMC92 genes}
+\begin{itemize}
+\item Step1: Randomly select 36 probe-sets out of the EMC92 which are to be missing in the test set.
+\item Step2: Determine $\phi$ for this situation based on the training set. 
+\item Step3: Apply the complete, the reweighted and the reduced model to both test sets.
+\item Step4: Determine the correlation between both the reduced and reweighted versus the complete model outcomes.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[trim=0cm 4.5cm 6cm 6cm, clip=true, scale=0.55]{Figures/Simulation3.pdf}
+\caption{Scatter plots of correlations between the complete and reweighted models (x-axis) and the complete and reduced models (y-axis) as applied on the UAMS-TT2 (left) and UAMS-TT3 (right) for 1000 randomly selected subsets of 36 out of the EMC92 genes.}
+
+\label{Simulation3}
+\end{figure}
+
+\section{Discussion}
+In general we observed a correlation to the complete model which was better for the reweighted model than for the reduced model. Only in the special case of absolutely no redundancy among the covariates, we did observe the contrary (Figure \ref{ProofOfPrinciple}). 
+However, after applying the method to real gene expression data, we found the effect to be present but often minimal. Somehow excluding low expressed genes resulted in simulation cycles that had reduced correlation in the reduced model compared to the reweigthed model (Figure \ref{Simulation1} versus \ref{Simulation2}). Interestingly, the highest correlations between either the reweighted or the reduced model and the complete model were observed while using the original EMC92 genes (Figure \ref{Simulation3}). This is likely related to the wider range of the continuous output values compared to the situations where genes were randomly chosen, in combination with a high degree of redundancy in the model.
+In conclusion, although the effect seems minimal, applying the reweighted classifier seems more often to be advantageous than not. 
+
+\end{document}

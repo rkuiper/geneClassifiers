@@ -1,0 +1,10 @@
+import('methods')
+import('utils')
+import('stats')
+import('Biobase')
+exportPattern("^[[:alpha:]]+")
+exportMethods(
+    "as.numeric",
+    "show" 
+)
+

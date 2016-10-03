@@ -1,0 +1,90 @@
+%\VignetteIndexEntry{geneClassifiers and missing probesets}
+\documentclass{article}
+
+\usepackage[letterpaper, portrait, margin=0.8in]{geometry}
+\usepackage{listings}
+\usepackage[colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{amsmath}
+
+
+\lstset{frame=tb,
+    language=R,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    numbers=none,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3
+}
+
+\usepackage{hyperref}
+\begin{document} 
+\title{Package: geneClassifiers (Version 1.0.0)}
+\author{R.Kuiper}
+\date{October 2, 2016}
+
+\maketitle
+
+<<echo=FALSE>>=
+library(geneClassifiers)
+@
+
+This packages enables application of gene expression data to existing gene classifiers. The currently implemented list of classifiers can be obtained with the command:
+<<>>=
+get.classifiers()
+@
+Further info can be obtained by :
+<<>>=
+get.info("EMC92")
+@
+
+The gene expression data to be classified should be given as an object of class ExpressionSet (see ?ExpressionSet). The example data 'eset.mas5' contains the expression profiles of 25 multiple myeloma patients from the HOVON65/GMMG-HD4 trial which are publically available on GEO with accession number \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE19784}{GSE19784}. Here, we already prenormalized the data using the mas5 function in the Bioconductor affy package with a default target value of 500.
+<<>>=
+data(eset.mas5)
+eset.mas5
+@
+
+Depending on the required normalization for the classifier (e.g. mas5 for the EMC92 classifier or gcrma for the HM19 classifier) the functions applyClassifier.mas5 or applyClassifier.gcrma can be called in order to run the classifications.
+<<>>=
+classifications.EMC92<- applyClassifier.mas5("EMC92",eset.mas5,used.MAS5TargetValue=500)
+classifications.EMC92
+
+classifications.UAMS70<- applyClassifier.mas5("UAMS70",eset.mas5,used.MAS5TargetValue=500)
+classifications.UAMS70
+@
+
+The numeric scores be extracted:
+<<>>=
+classifications.EMC92.numeric<-as.numeric(classifications.EMC92)
+classifications.UAMS70.numeric<-as.numeric(classifications.UAMS70)
+cbind( classifications.EMC92.numeric,  classifications.UAMS70.numeric)[1:9,]
+@
+
+Or the classifications can be extracted:
+<<>>=
+classifications.EMC92.factor<-as.factor(classifications.EMC92)
+classifications.UAMS70.factor<-as.factor(classifications.UAMS70)
+cbind( classifications.EMC92.factor,  classifications.UAMS70.factor)[1:9,]
+@
+
+
+By default the input dataset is assumed to contain many (n>=25) samples with corresponding probe-sets needed for classification. If one of these conditions is not met, a classifier outcome might be seriously affected. In taht case, by default an error is given. Although strongly discouraged, it is possible to circumvent the security checks. If not all required probe-sets are included in the input set, you can explicitly pass the parameter 'allow.reweighted = TRUE' to the 'applyClassifier' function in order to determine the classifier outcome using less probe-sets (e.g. possible if the missing probe-sets are known to have minimal contribution). See 'vignette("MissingCovariates")' for more information. If the input expression set has a small number of samples, the default batch correction becomes ineffective. If you are aware of the possible negative effects you, can enforce to not use batch correction by passing the parameter 'do.batchcorrection=FALSE'.
+<<>>=
+sessionInfo()
+@
+\end{document}
