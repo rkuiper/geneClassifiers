@@ -1,9 +1,9 @@
 Package: geneClassifiers
 Type: Package
 Title: Application of gene classifiers
-Version: 0.99.0
-Date: 2016-10-2
-Author: Rowan Kuiper
+Version: 0.99.1
+Date: 2016-10-04
+Author: R.Kuiper
 Maintainer: R.Kuiper <r.kuiper.emc@gmail.com>
 Description: Application of gene classifiers to mas5 or gcrma normalized expression data.
 License: GPL-2
