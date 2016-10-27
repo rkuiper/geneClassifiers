@@ -1,12 +1,36 @@
 Package: geneClassifiers
 Type: Package
 Title: Application of gene classifiers
-Version: 0.99.1
-Date: 2016-10-04
+Version: 0.99.2
+Date: 2016-10-27
 Author: R.Kuiper
 Maintainer: R.Kuiper <r.kuiper.emc@gmail.com>
-Description: Application of gene classifiers to mas5 or gcrma normalized expression data.
+Description: This packages aims for easy accessible application 
+    of classifiers which have been published in literature using 
+    an ExpressionSet as input.
 License: GPL-2
-Depends: Biobase
-Imports: methods, utils, stats
-biocViews: GeneExpression, BiomedicalInformatics, Classification, Survival, Microarray
+Depends:
+    methods,
+    utils
+Imports:
+    stats,
+    Biobase,
+    BiocGenerics
+Collate:
+    allGenericFunctions.R
+    Class_TransformationProcess.R
+    Class_FixedExpressionData.R
+    Class_ClassifierParameters.R
+    Class_ClassifierResults.R
+    EMC92.R
+    UAMS70.R
+    UAMS17.R
+    UAMS80.R
+    HM19.R
+    IFM15.R
+    MRCIX6.R
+    MILLENNIUM100.R
+    zzz.R
+biocViews: GeneExpression, BiomedicalInformatics, Classification, Survival,
+    Microarray
+RoxygenNote: 5.0.1
