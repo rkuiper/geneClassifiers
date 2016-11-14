@@ -1,6 +1,6 @@
 %\VignetteIndexEntry{geneClassifiers introduction}
 \documentclass{article}
-
+\usepackage[utf8]{inputenc}
 \usepackage[letterpaper, portrait, margin=0.8in]{geometry}
 \usepackage{listings}
 \usepackage[colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue]{hyperref}
@@ -44,31 +44,25 @@
 library(geneClassifiers)
 @
 
-This package aims for easy accessible use in research settings of gene 
-expression based classification by running classifiers which have been 
-published in literature. This is done through a workflow as illustrated 
-in Figure \ref{Fig:workflow}. The raw gene expression data as obtained by 
-microarray experiments is normalized using existing techniques (independent 
-of this package). The choice of normalization method should be driven by 
-the classifier to use. If the classifier to use was developped using MAS5.0 
-normalized training data - as is often the case due to its ability to handle 
-single microarrays - the new data to be classified should be normalized in a 
-similar way. The classifier is then applied to the data while performing the 
-required preprocessing steps such as mean centering, variance scaling, 
-truncations, etc.  Afterwards, the resulting scores/classifications can be 
-extracted. 
-
-
+Combining gene expression profiling data with survival data has led to the 
+development of robust outcome predictors (gene classifiers).This package 
+provides a method for running gene classifiers generating patient specific 
+predictive outcomes. This package is intended to support and enable 
+research. The workflow is illustrated in Figure \ref{Fig:workflow}. The raw gene 
+expression data obtained by microarray experiments is normalized using 
+existing techniques (independent of this package). The choice of 
+normalization method is dictated by the classifier. Some classifiers were 
+developed using MAS5.0. In that case, the data to be classified should be 
+normalized using MAS5.0. Normalization is followed by preprocessing 
+(this package) and generating scores/classifications (this package). 
+This package is suitable only for datasets of at least 20 patients.
 \begin{figure}[h]
 \centering
 \includegraphics[trim=0cm 0cm 0cm 0cm, clip=true, scale=0.5]{Figures/WorkFlow1.pdf}
-\caption{The workflow as is considered in the geneClassifiers package. The 
-raw gene expression data is normalized. This normalized data is used for 
-input in the geneClassifiers package as is indicated by the lower three 
-processes together with their relevant function(s).
-\label{Fig:workflow}}
+\caption{The workflow of the geneClassifiers package. The raw gene expression data 
+is normalized. This normalized data is used as input in the geneClassifiers package. 
+The processes with their relevant functions are shown. \label{Fig:workflow}}
 \end{figure}
-
 
 \section{Classifiers}
 \label{sec:Classifiers}
@@ -76,8 +70,8 @@ The currently implemented list of classifiers can be obtained with the command:
 <<>>=
 showClassifierList()
 @
-To find more information on a specific classifier (e.g. EMC92), an object 
-containing the classifier parameters can be obtained by
+To find more information on a specific classifier (e.g. EMC92),the classifier 
+parameters can be obtained by
 <<>>=
 EMC92Classifier<-getClassifier("EMC92")
 EMC92Classifier
@@ -87,13 +81,13 @@ HM19Classifier
 @
 
 This is an object of class 'ClassifierParameters' which stores classifier 
-related information, such as probe-sets used and their weightings, means, 
+related information, such as probe-sets used and their weights, means, 
 standard deviations and covariance structure as observed in the classifiers' 
 training data, and the description of the procedure on how to preprocess 
 new data prior to application of the classifier.
 
-Futher information can be obtained from this object through several getter 
-function such as obtaining the weights used by the classifier:
+Further information can be obtained from this object e.g. obtaining the weights 
+used in a classifier:
 
 <<>>=
 getWeights(EMC92Classifier)[1:10]
@@ -103,20 +97,18 @@ to
 <<>>=
 getDecisionBoundaries(HM19Classifier)
 @
-or the 'eventChain' which is used to preprocess the data prior to performing 
-the classification:
+or the 'eventChain' which gives information on preprocessing:
 <<>>=
 getEventChain(EMC92Classifier)
 @
 \section{Data to be classified}
 \label{sec:data}
-Currently, the input data for the 'geneClassifiers' package must be in the 
-form of a Bioconductor ExpressionSet which has been prenormalized using 
-exisiting methods such as MAS5.0 or GCRMA. For more information on these 
-methods see the Bioconductor 'affy' package. The 'geneClassifiers' package 
-contains an example dataset of MAS5.0 normalized (target value = 500) gene 
-expression data of 25 multiple myeloma patients that were treated in the 
-HOVON65/GMMG-HD4 trial.
+The input data for the 'geneClassifiers' package is a Bioconductor ExpressionSet 
+which has been prenormalized using existing methods such as MAS5.0 or GCRMA. 
+For more information on these methods see the Bioconductor 'affy' package. The 
+'geneClassifiers' package contains an example dataset of MAS5.0 normalized 
+(target value = 500) gene expression data of 25 multiple myeloma patients from 
+the HOVON65/GMMG-HD4 trial (Pieter Sonneveld et al., J Clin Oncol, 2012)
 <<>>=
 library(Biobase)
 data(exampleMAS5)
@@ -125,23 +117,28 @@ dim(exampleMAS5)
 preproc(experimentData(exampleMAS5))
 @
 
-To import this data into the 'geneClassifiers' package, the setNormalization 
+To import this data set into the 'geneClassifiers' package, the setNormalization 
 function is used:
 <<>>=
 fixedData <- setNormalizationMethod( exampleMAS5, method="MAS5.0", targetValue = 500 )
 fixedData
 @
 
-In order to find reliable results in the downstream classification process, the 
-function expects the unmanipulated output from the normalization methods. The 
-function tries to  detect deviations such as when providing subsets of data 
-sets or log transformed data, but detection is not guaranteed! When providing 
-an ExpressionSet with all probe-set still included, the 'targetValue=500' 
-argument - which has to be provided for the MAS5.0 normalization method - can 
-be extracted from the data. Because here we have reduced the number of 
-probe-sets in the example data due to space considerations, the MAS5.0 target 
-value can not be obtained from the data so that the argument has to be 
-provided. See '?setNormalizationMethod' for more details. 
+
+Nb the targetValue = 500 is only required in the example (see below).
+
+To get reliable results in the classification, the function depends on 
+unmanipulated output from the normalization methods, i.e. read in CEL 
+files into affy functions, obtain ExpressionSet, and use this set (without
+modification) for obtaining classifier scores. The function can detect 
+deviations such as subsets of data sets or log transformed data, but 
+detection of deviations is not guaranteed. When providing an ExpressionSet
+with all probe-sets still included, the 'targetValue=500' argument is not 
+necessary because the function is able to extract the value from the data.
+In the example the number of probe-sets was reduced due to space 
+considerations, the MAS5.0 target value cannot be obtained from the data
+so that the argument has to be provided. See '?setNormalizationMethod' 
+for more details. 
 
 
 \section{Performing classifications}
@@ -171,27 +168,26 @@ data.frame(
 
 \section{Caution: non standard situations}
 
-The geneClassifiers package performs a batch correction by applying a linear 
-transformation of the probe-set means and standard deviations to the values 
-observed in the classifiers' training set. In order to accurately do this, 
-the assumption is that the data contains a sufficient amount of samples 
-(n>=20) to estimate the means and standard deviations. If less samples are 
-available, the 'runClassifier' function will give a warning and suggest to 
-consider setting 'do.batchcorrection = FALSE'. Please note this will only 
-result in valid results if the data under consideration is not expected to 
-have significant batch related differences compared to the classifiers 
-training set. I.e. similar sample work procedures, hybridization reagents, 
-etc, are assumed!
+The geneClassifiers package performs a batch correction by applying a linear
+transformation of the probe-set means and standard deviations to the values
+observed in the classifiers' training set. In order to accurately do this 
+the data must contain a sufficient number of samples (n>=20) to estimate the
+means and standard deviations. If less samples are available, the 
+'runClassifier' function will give a warning and suggest to consider setting
+'do.batchcorrection = FALSE'. Please note this will most likely result in 
+invalid classifications (or certainly different classifications). 
 
-Besides the requirements of a matching normalization method between data and 
-classifier and sufficient samples, the assumption is that the probe-sets 
-needed for classification are present in the data. If this is not true, 
-simply ignoring the missing probe-set may heavily bias the results. Therefore, 
-when detecting missing probe-sets, the 'run-classifier' function will throw an 
-error and suggest to consider using the argument 'allow.reweighted = TRUE'. 
+Besides the requirements of a matching normalization method between data and
+ classifier and sufficient samples, the assumption is that the probe-sets 
+needed for classification are present in the data. If this is not true, simply 
+ignoring the missing probe-set may heavily bias the results. Therefore, when 
+detecting missing probe-sets, the 'run-classifier' function will give an error 
+message and suggest to consider using the argument 'allow.reweighted = TRUE'. 
 This will reweight the weightings for the probe-sets which are present, based 
 on the covariance structure of the classifiers' trainings data. See the 
-vignette 'MissingCovariates' for more information. 
+vignette 'MissingCovariates' for more information. Please note this is not 
+how the classifiers are intended and consequentially will result in different 
+classifications. 
 
 <<fig=TRUE>>=
 resultsEMC92.reWeighted <- runClassifier( 
@@ -223,3 +219,4 @@ abline(
 sessionInfo()
 @
 \end{document}
+

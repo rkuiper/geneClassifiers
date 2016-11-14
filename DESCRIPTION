@@ -1,8 +1,8 @@
 Package: geneClassifiers
 Type: Package
 Title: Application of gene classifiers
-Version: 0.99.3
-Date: 2016-10-27
+Version: 0.99.4
+Date: 2016-11-08
 Author: R.Kuiper
 Maintainer: R.Kuiper <r.kuiper.emc@gmail.com>
 Description: This packages aims for easy accessible application 
