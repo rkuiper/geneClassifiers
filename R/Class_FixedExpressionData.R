@@ -120,24 +120,23 @@ setMethod("initialize",
         .Object@transformationProcess<-new.env()
         .Object@transformationProcess[["processes"]]<-list()
 
-
-        calculatedEstimate<-.isAlreadylog2Transformed.check(.Object@expressionEnvironment[["expressionMatrix"]])
-        if (!is.null(dotList[["isLog2Transformed"]])) {
-            if(dotList[["isLog2Transformed"]]!=calculatedEstimate) {
-                warning("Reconsider argument isLog2Transformed = ",dotList[["isLog2Transformed"]])
-            }
-        } else {
-            dotList[["isLog2Transformed"]]<-calculatedEstimate
-            if (calculatedEstimate==TRUE) {
-                 warning("The data seems to be log2 transformed. If this is incorrect, please provide the logical argument 'isLog2Transformed=FALSE'.")
-            }
-        }
-        if (dotList[["isLog2Transformed"]]){
-             .Object@expressionEnvironment[["expressionMatrix"]]<-2^.Object@expressionEnvironment[["expressionMatrix"]]
-        }
-
         ##Normalization method specific code:
         if (.Object@normalizationMethod == "MAS5.0"){
+            calculatedEstimate<-.isAlreadylog2Transformed.check(.Object@expressionEnvironment[["expressionMatrix"]])
+            if (!is.null(dotList[["isLog2Transformed"]])) {
+                if(dotList[["isLog2Transformed"]]!=calculatedEstimate) {
+                    warning("Reconsider argument isLog2Transformed = ",dotList[["isLog2Transformed"]])
+                }
+            } else {
+                dotList[["isLog2Transformed"]]<-calculatedEstimate
+                if (calculatedEstimate==TRUE) {
+                     warning("The data seems to be log2 transformed. If this is incorrect, please provide the logical argument 'isLog2Transformed=FALSE'.")
+                }
+            }
+            if (dotList[["isLog2Transformed"]]){
+                 .Object@expressionEnvironment[["expressionMatrix"]]<-2^.Object@expressionEnvironment[["expressionMatrix"]]
+            }
+
  
             calculatedTargetValue<-.getTargetValue(.Object@expressionEnvironment[["expressionMatrix"]])
             if (!is.null(dotList[["targetValue"]])){
