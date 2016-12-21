@@ -11,7 +11,7 @@ getDecisionBoundaries(object)
 \S4method{getDecisionBoundaries}{ClassifierParameters}(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link{ClassifierParameters}} 
+\item{object}{An object of class \code{\link{ClassifierParameters}}
 as returned by \code{\link{getClassifier}}}
 }
 \value{
@@ -27,11 +27,12 @@ getDecisionBoundaries(aClassifier)
 }
 \seealso{
 Other classifier information functions: \code{\link{getCitations}},
-    \code{\link{getClassifier}},
-    \code{\link{getDescription}},
-    \code{\link{getEventChain}}, \code{\link{getIntercept}},
-    \code{\link{getNormalizationMethod}},
-    \code{\link{getProbeNames}},
-    \code{\link{getTrainingData}}, \code{\link{getWeights}}
+  \code{\link{getClassifier}},
+  \code{\link{getDescription}},
+  \code{\link{getEventChain}}, \code{\link{getIntercept}},
+  \code{\link{getMeans}},
+  \code{\link{getNormalizationMethod}},
+  \code{\link{getProbeNames}}, \code{\link{getSds}},
+  \code{\link{getTrainingData}}, \code{\link{getWeights}}
 }
 

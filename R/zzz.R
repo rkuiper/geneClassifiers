@@ -2,7 +2,6 @@
 
 .onAttach<-function(libname, pkgname) {
     packageStartupMessage('See vignette("geneClassifiers") for help')
-    checkClassifierHooks()
 }
 .onLoad<-function(libname, pkgname) {}
 
@@ -53,59 +52,6 @@ setMethod("getClassifier",
     }
 )
 
-
-doCheckEventChains<-function(eventChain,normalizationMethod){
-    normalizationMethod<-match.arg(normalizationMethod,getNormalizationMethods())
-    allowedKeyWords<-c("targetValue","truncate","to.log","allow.reweighted","to.meancentering","to.unitvariance","to.referencemeanvar")
-
-
-    if (!all(names(eventChain)%in%allowedKeyWords)){
-        diff<-setdiff(names(eventChain),allowedKeyWords)
-        stop("Eventchain structure error: Unrecognized keyword(s) in eventChain: ",paste(diff,collapse=","))
-    }
-
-    #$ 'targetValue' (Must be given for MAS5.0 classifiers only. Only used for mas5 classifiers. Indicating the required targetValue)
-    if (normalizationMethod=="MAS5.0") {
-        if (!"targetValue"%in%names(eventChain)){stop("Eventchain structure error: keyword 'targetValue' must be given for a mas5 classifier.")}
-        if (!is.numeric(eventChain[["targetValue"]])){stop("Eventchain structure error: keyword 'targetValue' must have a numeric value.")}
-        if (eventChain[["targetValue"]]<1){stop("Eventchain structure error: keyvalue 'targetValue' must be a positive real number.")}
-    } else if ("targetValue"%in%names(eventChain)){stop("Eventchain structure error: keyword 'targetValue' can be given for a mas5 classifiers only.")
-    }
-    #$ 'truncate' (Must be given. Trunctates values below a given value (applies to untransformed/unlogged data.)
-
-
-    if (!"truncate"%in%names(eventChain)){stop("Eventchain structure error: keyword 'truncate' must be given.")}
-    if (!is.numeric(eventChain[["truncate"]])){stop("Eventchain structure error: keyword 'truncate' must have a numeric value.")}
-
-    #$ 'to.log' (Although probably only logical to apply in MAS5.0 normalized data, always applicable)
-        if (!is.null(eventChain[["to.log"]])){
-        if (!is.numeric(eventChain[["to.log"]])){stop("Eventchain structure error: keyword 'to.log' must be a numerical value representing the base number for the log.")}
-    }
-
-
-    #$ 'allow.reweighted' Must be given (should reweigting be allowed in case of missing probe-set(s)?)
-    if ("allow.reweighted"%in%names(eventChain)){
-        if (!is.logical(eventChain[["allow.reweighted"]])){stop("Eventchain structure error: keyword 'allow.reweighted' must be a logical TRUE or FALSE.")}
-    } else {
-        stop("Eventchain structure error: keyword 'allow.reweighted' must be given.")
-    }
-
-    #$ 'to.meancentering' (per probe-set based centering to mean=0)
-    if ("to.meancentering"%in%names(eventChain)){
-        if (!is.logical(eventChain[["to.meancentering"]])){stop("Eventchain structure error: keyword 'to.meancentering' must be a logical TRUE or FALSE.")}
-    }
-
-    #$ 'to.unitvariance' (per probe-set based centering to mean=0)
-    if ("to.unitvariance"%in%names(eventChain)){
-        if (!is.logical(eventChain[["to.unitvariance"]])){stop("Eventchain structure error: keyword 'to.unitvariance' must be a logical TRUE or FALSE.")}
-    }
-
-    #$ 'to.referencemeanvar' (set probe-set means and variances to equal values as observed in training set)
-    if ("to.referencemeanvar"%in%names(eventChain)){
-        if (!is.logical(eventChain[["to.referencemeanvar"]])){stop("Eventchain structure error: keyword 'to.referencemeanvar' must be a logical TRUE or FALSE.")}
-    }
-}
-
 #' @aliases setNormalizationMethod
 #' @title Prepare data.
 #'
@@ -151,57 +97,10 @@ setNormalizationMethod<-function(expressionSet, method, ...){
     }
     method <- match.arg( toupper(method), getNormalizationMethods() )
     dotList <- list(...)
-    return(new("FixedExpressionData",
+    FixedExpressionData(
         normalizationMethod=method,
         expressionMatrix=exprs(expressionSet),
         ...)
-    )
+    
 }
 
-checkClassifierHooks<-function(){
-    funcDefCorrect<-unlist(lapply(.classifierHookList,function(x){
-        fml<-formals(x)
-        return(all(names(fml)==c("infoOnly","...")) & all(unlist(fml)==c(TRUE,"")))
-    }))
-    if (any(funcDefCorrect==FALSE)){
-        stop("Found ",sum(funcDefCorrect),
-        " classifierHooks that did not have the correct function defintion")
-    }
-    registeredClassifiers<-lapply(.classifierHookList,function(x){x()})
-    argumentReturnOrder<-unlist(lapply(registeredClassifiers,function(x){
-        all(names(x)==c("name","normalizationMethod","description"))
-    }))
-    namesCorrect<-unlist(lapply(registeredClassifiers,function(x){
-        is.character(x["name"]) & nchar(x["name"])>2
-    }))
-    normalizationMethodCorrect<-unlist(lapply(registeredClassifiers,function(x){
-        x["normalizationMethod"]%in%getNormalizationMethods()
-    }))
-    namesDuplicated<-duplicated(unlist(lapply(registeredClassifiers,function(x){
-        x["name"]
-    })))
-    if (any(namesDuplicated==TRUE)){
-        notOK<-registeredClassifiers[which(namesDuplicated==TRUE),drop=FALSE]
-        txt<-paste(unlist(lapply(notOK,function(x){x["name"]})),collapse=",")
-        stop("The following classifierHooks were found to have names that occured more than once: ",txt,"\n")
-    }
-    if (any(argumentReturnOrder==FALSE)){
-        notOK<-registeredClassifiers[which(argumentReturnOrder==FALSE)]
-        txt<-paste(unlist(lapply(notOK,function(x){x["name"]})),collapse=",")
-        stop("The following classifierHooks did not have a correct argument return order: ",txt,"\n")
-    }
-    if (any(namesCorrect==FALSE)){
-        notOK<-registeredClassifiers[which(namesCorrect==FALSE)]
-        txt<-paste(unlist(lapply(notOK,function(x){x["name"]})),collapse=",")
-        stop("Some classifierHooks did not have a correct classifier name (i.e. >2 characters)\n")
-    }
-    if (any(normalizationMethodCorrect==FALSE)){
-        notOK<-registeredClassifiers[which(normalizationMethodCorrect==FALSE)]
-        txt<-paste(unlist(lapply(notOK,function(x){x["name"]})),collapse=",")
-        stop(
-            "The following classifierHooks did not provided a known normalization method (i.e. one of ",
-            paste(getNormalizationMethods(),collapse=","),"): ",txt,"\n"
-        )
-    }
-    registeredClassifiers<-lapply(.classifierHookList,function(x){x(infoOnly=FALSE)})
-}

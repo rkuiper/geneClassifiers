@@ -1,3 +1,25 @@
+.classifierHookList<-list()
+
+setGeneric("FixedExpressionData",
+    function(normalizationMethod,expressionMatrix,...){
+        standardGeneric ("FixedExpressionData")
+})
+
+setGeneric("ClassifierResults", 
+    function(weightingType,batchCorrection,score,classifierParameters){
+        standardGeneric ("ClassifierResults")
+})
+
+setGeneric("ClassifierParameters",   
+    function(name, doRun, hasTrainingData, normalizationMethod, weights, description="",intercept=NULL,means=NULL,sds=NULL,decisionBoundaries=NULL,eventChain = NULL,citations=NULL){
+        standardGeneric ("ClassifierParameters")
+})
+
+setGeneric("TransformationProcess", 
+    function(name,values,...){
+        standardGeneric ("TransformationProcess")
+})
+
 ##############################################################
 #' Obtain classifier score.
 #'
@@ -20,7 +42,10 @@
 #' results <- runClassifier('EMC92', myData)
 #' getScores( results )
 #' getClassifications( results )
-setGeneric("getScores",function(object){standardGeneric ("getScores")})
+setGeneric("getScores",
+    function(object){
+        standardGeneric ("getScores")
+    })
 
 ##############################################################
 #' Obtain classifier classifications.
@@ -38,16 +63,80 @@ setGeneric("getScores",function(object){standardGeneric ("getScores")})
 #' @rdname getClassifications-methods
 #'
 #' @examples
-#' data(exampleMAS5)
 #' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0",targetValue=500)
 #' results <- runClassifier('EMC92', myData)
 #' getScores( results )
 #' getClassifications( results )
-setGeneric("getClassifications",function(object){standardGeneric ("getClassifications")})
+setGeneric("getClassifications",
+    function(object){
+        standardGeneric ("getClassifications")
+})
 
-setGeneric("runProcess",function(object,expressionMat){standardGeneric ("runProcess")})
+setGeneric("runProcess",
+    function(object,expressionMat){
+        standardGeneric ("runProcess")
+})
 
-setGeneric("getValues",function(object){standardGeneric ("getValues")})
+setGeneric("getValues",
+    function(object){
+        standardGeneric ("getValues")
+})
+
+
+
+##############################################################
+#' Obtain the batch correction status for a classifier result.
+#'
+#' \code{getBatchCorrection} returns TRUE or FALSE
+#'  indicating whether correction was applied
+#'
+#' @param object An object of class \code{\link{ClassifierResults}}
+#' as returned by \code{\link{runClassifier}}
+#'
+#' @return TRUE or FALSE
+#'
+#' @family classifier results
+#'
+#' @export
+#' @docType methods
+#' @rdname getBatchCorrection-methods
+#'
+#' @examples
+#' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0",targetValue=500)
+#' results <- runClassifier('EMC92', myData)
+#' getBatchCorrection( results )
+setGeneric("getBatchCorrection",
+    function(object){
+        standardGeneric ("getBatchCorrection")
+})
+
+##############################################################
+#' Obtain the weighting type used to obtain a classifier result.
+#'
+#' \code{getWeightingType} returns weigthing type 
+#' 
+#'
+#' @param object An object of class \code{\link{ClassifierResults}}
+#' as returned by \code{\link{runClassifier}}
+#'
+#' @return \code{complete} or \code{reweighted}
+#'
+#' @family classifier results
+#'
+#' @export
+#' @docType methods
+#' @rdname getWeightingType-methods
+#'
+#' @examples
+#' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0",targetValue=500)
+#' results <- runClassifier('EMC92', myData)
+#' getWeightingType( results )
+setGeneric("getWeightingType",
+    function(object ){
+        standardGeneric ("getWeightingType")
+})
+
+
 
 ##############################################################
 #' Obtain object names.
@@ -68,10 +157,20 @@ setGeneric("getValues",function(object){standardGeneric ("getValues")})
 #' @examples
 #' aClassifier <- getClassifier("EMC92")
 #' getName( aClassifier )
-setGeneric("getName",function(object){standardGeneric ("getName")})
+setGeneric("getName",
+    function(object){
+        standardGeneric ("getName")
+})
 
-setGeneric("explicitlyChangeExprs<-",function(object,value){standardGeneric ("explicitlyChangeExprs<-")})
-setGeneric("getExpressionEnvironment",function(object,value){standardGeneric ("getExpressionEnvironment")})
+setGeneric("explicitlyChangeExprs<-",
+    function(object,value){
+        standardGeneric ("explicitlyChangeExprs<-")
+})
+
+setGeneric("getExpressionEnvironment",
+    function(object,value){
+        standardGeneric ("getExpressionEnvironment")
+})
 
 ##############################################################
 #' Obtain normalization method
@@ -98,7 +197,10 @@ setGeneric("getExpressionEnvironment",function(object,value){standardGeneric ("g
 #' aClassifier <- getClassifier("EMC92")
 #' getNormalizationMethod( myData )
 #' getNormalizationMethod( aClassifier )
-setGeneric("getNormalizationMethod",function(object){standardGeneric ("getNormalizationMethod")})
+setGeneric("getNormalizationMethod",
+    function(object){
+        standardGeneric ("getNormalizationMethod")
+})
 
 ##############################################################
 #' Obtain the targetValue
@@ -365,8 +467,57 @@ setGeneric("getDescription",function(object ){standardGeneric ("getDescription")
 #' runClassifier("EMC92",myData)
 setGeneric("runClassifier",function(classifierParameters, fixedExpressionData,... ){standardGeneric ("runClassifier")})
 
+##############################################################
+#' Obtain classifiers' reference means.
+#'
+#' \code{getMeans} returns the reference means encoded in the
+#' in the classifier. 
+#'
+#' @param object An object of class \code{\link{ClassifierParameters}}
+#' as returned by \code{\link{getClassifier}}
+#'
+#' @return Returns a numeric vector of probe set means as observed
+#' in the reference data
+#'
+#'
+#' @family classifier information functions
+#' @seealso showClassifierList getClassifier runClassifier
+#'
+#' @export
+#' @docType methods
+#' @rdname getMeans-methods
+#'
+#' @examples
+#' aClassifier <- getClassifier("EMC92")
+#' getMeans(aClassifier)
 setGeneric("getMeans",function(object ){standardGeneric ("getMeans")})
+
+##############################################################
+#' Obtain classifiers' reference standard deviations.
+#'
+#' \code{getSds} returns the reference standard deviations
+#'  encoded in the classifier. 
+#'
+#' @param object An object of class \code{\link{ClassifierParameters}}
+#' as returned by \code{\link{getClassifier}}
+#'
+#' @return Returns a numeric vector of probe set standard deviations 
+#' as observed in the reference data
+#'
+#'
+#' @family classifier information functions
+#' @seealso showClassifierList getClassifier runClassifier
+#'
+#' @export
+#' @docType methods
+#' @rdname getSds-methods
+#'
+#' @examples
+#' aClassifier <- getClassifier("EMC92")
+#' getSds(aClassifier)
 setGeneric("getSds",function(object ){standardGeneric ("getSds")})
+
+setGeneric("getDoRun",function(object ){standardGeneric ("getDoRun")})
 
 ##############################################################
 #' Obtain classifiers' event chain.
@@ -395,7 +546,6 @@ setGeneric("getSds",function(object ){standardGeneric ("getSds")})
 #' getEventChain(aClassifier)
 setGeneric("getEventChain",function(object ){standardGeneric ("getEventChain")})
 
-setGeneric("reWeightClassifier",function(object,probeNames, intercept,weights){standardGeneric ("reWeightClassifier")})
+setGeneric("reWeightClassifier",function(object,fixedExpressionData){standardGeneric ("reWeightClassifier")})
 
-.classifierHookList<-list()
-
+setGeneric("hasTrainingData",function(object){standardGeneric ("hasTrainingData")})

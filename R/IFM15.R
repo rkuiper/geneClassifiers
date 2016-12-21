@@ -3,12 +3,7 @@ function(infoOnly=TRUE,...){
     name="IFM15"
     normalizationMethod="MAS5.0"
     description="A risk classifier for multiple myeloma"
-    probeNames<-c(
-        "209683_at"  ,"200779_at"  ,"203657_s_at" ,"201425_at" ,
-        "217752_s_at","200783_s_at","202486_at"   ,"202951_at" ,
-        "208644_at"  ,"202470_s_at","212098_at"   ,"228737_at" ,
-        "204072_s_at","228677_s_at","1565162_s_at","231736_x_at"
-    )
+       hasTrainingData = FALSE
     #training set means are unknown
     #means<-
     #training set sds are unknown
@@ -18,6 +13,12 @@ function(infoOnly=TRUE,...){
         0.38697337, 0.31490195, 0.30371178, 0.29530369,
         0.27578783, 0.26987655, 0.25043791, 0.21956366,
         0.21255699, 0.19243758, 0.08886402, 0.08886402
+    )
+    names(weights)<-c(
+        "209683_at"  ,"200779_at"  ,"203657_s_at" ,"201425_at" ,
+        "217752_s_at","200783_s_at","202486_at"   ,"202951_at" ,
+        "208644_at"  ,"202470_s_at","212098_at"   ,"228737_at" ,
+        "204072_s_at","228677_s_at","1565162_s_at","231736_x_at"
     )
     intercept<-0
     decisionBoundaries<-0.956
@@ -37,18 +38,18 @@ function(infoOnly=TRUE,...){
     if(infoOnly) {
         return( c( "name"=name ,"normalizationMethod"=  normalizationMethod ,"description"=description) )
     }
-    new("ClassifierParameters",
+    ClassifierParameters(
         name=name,
         description=description,
         normalizationMethod=normalizationMethod,
         weights=weights,
         intercept=intercept,
-        probeNames=probeNames,
 #        means = means,
 #        sds = sds,
         decisionBoundaries=decisionBoundaries,
         doRun=doRun,
         citations = citations,
-        eventChain=eventChain
+        eventChain=eventChain,
+        hasTrainingData=hasTrainingData
     )
 }

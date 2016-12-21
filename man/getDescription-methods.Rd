@@ -11,14 +11,14 @@ getDescription(object)
 \S4method{getDescription}{ClassifierParameters}(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link{ClassifierParameters}} 
+\item{object}{An object of class \code{\link{ClassifierParameters}}
 as returned by \code{\link{getClassifier}}}
 }
 \value{
 A character string describing the classifier
 }
 \description{
-\code{getDescription} returns the descriptive text associated 
+\code{getDescription} returns the descriptive text associated
 with the classifier.
 }
 \examples{
@@ -27,11 +27,12 @@ getDescription(aClassifier)
 }
 \seealso{
 Other classifier information functions: \code{\link{getCitations}},
-    \code{\link{getClassifier}},
-    \code{\link{getDecisionBoundaries}},
-    \code{\link{getEventChain}}, \code{\link{getIntercept}},
-    \code{\link{getNormalizationMethod}},
-    \code{\link{getProbeNames}},
-    \code{\link{getTrainingData}}, \code{\link{getWeights}}
+  \code{\link{getClassifier}},
+  \code{\link{getDecisionBoundaries}},
+  \code{\link{getEventChain}}, \code{\link{getIntercept}},
+  \code{\link{getMeans}},
+  \code{\link{getNormalizationMethod}},
+  \code{\link{getProbeNames}}, \code{\link{getSds}},
+  \code{\link{getTrainingData}}, \code{\link{getWeights}}
 }
 

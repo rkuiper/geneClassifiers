@@ -11,14 +11,14 @@ getTrainingData(object)
 \S4method{getTrainingData}{ClassifierParameters}(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link{ClassifierParameters}} 
+\item{object}{An object of class \code{\link{ClassifierParameters}}
 as returned by \code{\link{getClassifier}}}
 }
 \value{
 An object of class \code{\link{ExpressionSet}}
 }
 \description{
-\code{getTrainingData} returns the training data that was used 
+\code{getTrainingData} returns the training data that was used
 for building the classifier.
 }
 \examples{
@@ -27,11 +27,13 @@ getTrainingData(aClassifier)
 }
 \seealso{
 Other classifier information functions: \code{\link{getCitations}},
-    \code{\link{getClassifier}},
-    \code{\link{getDecisionBoundaries}},
-    \code{\link{getDescription}},
-    \code{\link{getEventChain}}, \code{\link{getIntercept}},
-    \code{\link{getNormalizationMethod}},
-    \code{\link{getProbeNames}}, \code{\link{getWeights}}
+  \code{\link{getClassifier}},
+  \code{\link{getDecisionBoundaries}},
+  \code{\link{getDescription}},
+  \code{\link{getEventChain}}, \code{\link{getIntercept}},
+  \code{\link{getMeans}},
+  \code{\link{getNormalizationMethod}},
+  \code{\link{getProbeNames}}, \code{\link{getSds}},
+  \code{\link{getWeights}}
 }
 

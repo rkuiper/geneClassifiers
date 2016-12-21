@@ -178,7 +178,7 @@ means and standard deviations. If less samples are available, the
 invalid classifications (or certainly different classifications). 
 
 Besides the requirements of a matching normalization method between data and
- classifier and sufficient samples, the assumption is that the probe-sets 
+classifier and sufficient samples, the assumption is that the probe-sets 
 needed for classification are present in the data. If this is not true, simply 
 ignoring the missing probe-set may heavily bias the results. Therefore, when 
 detecting missing probe-sets, the 'run-classifier' function will give an error 

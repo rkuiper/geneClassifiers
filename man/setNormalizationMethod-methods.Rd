@@ -8,10 +8,10 @@
 setNormalizationMethod(expressionSet, method, ...)
 }
 \arguments{
-\item{expressionSet}{An object of class \code{\link{ExpressionSet}} containing the gene 
+\item{expressionSet}{An object of class \code{\link{ExpressionSet}} containing the gene
 expression data.}
 
-\item{method}{A character string indicating the normalization that was applied to the data. 
+\item{method}{A character string indicating the normalization that was applied to the data.
 Possible values are given by \code{getNormalizationMethods()}.}
 
 \item{...}{see details.}
@@ -23,15 +23,15 @@ An object of class \code{\link{FixedExpressionData}}
 \code{setNormalizationMethod} is to be called prior to running a classifier.
 }
 \details{
-The \code{\link{FixedExpressionData}} class forms together with the 
-\code{\link{ClassifierParameters}} class the basis for input to the  \code{\link{runClassifier}} 
-function. The data inside the \code{\link{FixedExpressionData}}-class has to be stored as it is 
+The \code{\link{FixedExpressionData}} class forms together with the
+\code{\link{ClassifierParameters}} class the basis for input to the  \code{\link{runClassifier}}
+function. The data inside the \code{\link{FixedExpressionData}}-class has to be stored as it is
 right after normalization.  This function may require some additional arguments:
 \itemize{
-\item \code{isLog2Transformed = TRUE} Use this argument if the data already underwent a 
+\item \code{isLog2Transformed = TRUE} Use this argument if the data already underwent a
 log2transformation, as is common e.g. in case of MAS5.0 normalization.
-\item \code{targetValue = value} This is a MAS5.0 specific argument. It is the sample intensity 
-mean when the lowest and highest 2\% of intensities are discarded. If only part of the original 
+\item \code{targetValue = value} This is a MAS5.0 specific argument. It is the sample intensity
+mean when the lowest and highest 2\% of intensities are discarded. If only part of the original
 expression set is given to this function, then this argument is required.
 }
 }
@@ -45,7 +45,7 @@ getClassifications( results )
 }
 \seealso{
 Other workflow functions: \code{\link{getNormalizationMethod}},
-    \code{\link{runClassifier}},
-    \code{\link{showClassifierList}}
+  \code{\link{runClassifier}},
+  \code{\link{showClassifierList}}
 }
 

@@ -1,32 +1,10 @@
-#' UAMS80 training set
-#'
-#' An \code{\link{ExpressionSet}}. The data was MAS5.0 normalized to a target value of 500 and log2 transformed.
-#'
-
-"UAMS80_ExpressionSet_training"
 .classifierHookList[[length(.classifierHookList)+1]]<-
 function(infoOnly=TRUE,...){
     name="UAMS80"
     normalizationMethod="MAS5.0"
     description="A risk classifier for multiple myeloma"
-    probeNames<-c(
-        '201754_at','219110_at','201652_at','200642_at','209251_x_at',
-        '200014_s_at','200039_s_at','201252_at','226924_at','225638_at',
-        '235346_at','211069_s_at','202244_at','201400_at','202596_at',
-        '202243_s_at','218351_at','223480_s_at','209503_s_at','212626_x_at',
-        '203396_at','200882_s_at','201157_s_at','200786_at','209628_at',
-        '204587_at','210460_s_at','200830_at','202690_s_at','211609_x_at',
-        '218566_s_at','212296_at','217933_s_at','201114_x_at','205687_at',
-        '210334_x_at','229417_at','238996_x_at','236554_x_at','229856_s_at',
-        '214752_x_at','208576_s_at','202768_at','230292_at','217513_at',
-        '1564423_a_at','211302_s_at','233909_at','215671_at','208869_s_at',
-        '1552542_s_at','1561060_at','1557633_at','223961_s_at','202340_x_at',
-        '226499_at','242548_x_at','228984_at','229388_at','1552519_at',
-        '239343_at','212960_at','236986_at','223643_at','203708_at',
-        '221223_x_at','213658_at','238801_at','235670_at','225582_at',
-        '227524_at','239082_at','223377_x_at','216215_s_at','212050_at',
-        '200673_at','223250_at','227893_at','223215_s_at','226399_at'
-    )
+    hasTrainingData = TRUE
+
     #means are based on the mas5 log2 data
     means<-c(
         13.3609851616866,10.8730066629585,11.1839502244337,
@@ -57,6 +35,7 @@ function(infoOnly=TRUE,...){
         13.0716981269302,10.4425887638573,8.49661819546701,
         11.4233552149297,10.4704437166
     )
+
     #sds are based on the mas5 log2 data
     sds<-c(
         0.449055697669759,0.419579171703851,0.52777844847999,
@@ -88,6 +67,24 @@ function(infoOnly=TRUE,...){
         0.48198321892677,0.438068245798283
     )
     weights<-c(rep(1/42,42),rep(-1/38,38))
+    names(weights)<-c(
+        '201754_at','219110_at','201652_at','200642_at','209251_x_at',
+        '200014_s_at','200039_s_at','201252_at','226924_at','225638_at',
+        '235346_at','211069_s_at','202244_at','201400_at','202596_at',
+        '202243_s_at','218351_at','223480_s_at','209503_s_at','212626_x_at',
+        '203396_at','200882_s_at','201157_s_at','200786_at','209628_at',
+        '204587_at','210460_s_at','200830_at','202690_s_at','211609_x_at',
+        '218566_s_at','212296_at','217933_s_at','201114_x_at','205687_at',
+        '210334_x_at','229417_at','238996_x_at','236554_x_at','229856_s_at',
+        '214752_x_at','208576_s_at','202768_at','230292_at','217513_at',
+        '1564423_a_at','211302_s_at','233909_at','215671_at','208869_s_at',
+        '1552542_s_at','1561060_at','1557633_at','223961_s_at','202340_x_at',
+        '226499_at','242548_x_at','228984_at','229388_at','1552519_at',
+        '239343_at','212960_at','236986_at','223643_at','203708_at',
+        '221223_x_at','213658_at','238801_at','235670_at','225582_at',
+        '227524_at','239082_at','223377_x_at','216215_s_at','212050_at',
+        '200673_at','223250_at','227893_at','223215_s_at','226399_at'
+    )
     intercept<-0
     decisionBoundaries<-2.48
     citations<-list("John D. Shaughnessy, Pingping Qu, Saad Usmani, et. al.; Blood Sep 2011, 118 (13) 3512-3524; DOI: 10.1182/blood-2010-12-328252")
@@ -105,18 +102,18 @@ function(infoOnly=TRUE,...){
     if(infoOnly) {
         return( c( "name"=name ,"normalizationMethod"=  normalizationMethod ,"description"=description) )
     }
-    new("ClassifierParameters",
+    ClassifierParameters(
         name=name,
         description=description,
         normalizationMethod=normalizationMethod,
         weights=weights,
         intercept=intercept,
-        probeNames=probeNames,
         means = means,
         sds = sds,
         decisionBoundaries=decisionBoundaries,
         doRun=doRun,
         citations = citations,
-        eventChain=eventChain
+        eventChain=eventChain,
+        hasTrainingData=hasTrainingData
     )
 }

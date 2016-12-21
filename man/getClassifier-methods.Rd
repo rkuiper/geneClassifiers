@@ -14,15 +14,15 @@ getClassifier(value)
 \S4method{getClassifier}{character}(value)
 }
 \arguments{
-\item{value}{Either a text value indicating a classifier name 
-(see \code{\link{showClassifierList}}), or an object of 
-class \code{\link{ClassifierResults}} as returned by the 
+\item{value}{Either a text value indicating a classifier name
+(see \code{\link{showClassifierList}}), or an object of
+class \code{\link{ClassifierResults}} as returned by the
 \code{\link{runClassifier}} function.}
 }
 \value{
-The return value is a classifier definition which  
-is encoded in an object of class \code{\link{ClassifierParameters}}. 
-This can be used as input argument for the \code{\link{runClassifier}} 
+The return value is a classifier definition which
+is encoded in an object of class \code{\link{ClassifierParameters}}.
+This can be used as input argument for the \code{\link{runClassifier}}
 function.
 }
 \description{
@@ -35,11 +35,12 @@ getClassifier("EMC92")
 \code{\link{ClassifierParameters}} and \code{\link{runClassifier}}
 
 Other classifier information functions: \code{\link{getCitations}},
-    \code{\link{getDecisionBoundaries}},
-    \code{\link{getDescription}},
-    \code{\link{getEventChain}}, \code{\link{getIntercept}},
-    \code{\link{getNormalizationMethod}},
-    \code{\link{getProbeNames}},
-    \code{\link{getTrainingData}}, \code{\link{getWeights}}
+  \code{\link{getDecisionBoundaries}},
+  \code{\link{getDescription}},
+  \code{\link{getEventChain}}, \code{\link{getIntercept}},
+  \code{\link{getMeans}},
+  \code{\link{getNormalizationMethod}},
+  \code{\link{getProbeNames}}, \code{\link{getSds}},
+  \code{\link{getTrainingData}}, \code{\link{getWeights}}
 }
 

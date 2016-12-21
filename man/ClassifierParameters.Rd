@@ -6,9 +6,9 @@
 \title{An S4 class to store classifier parameters.}
 \description{
 This class stores classifier related information
-This is information on probe-sets used and their weightings, 
-means, standard deviations and covariance structure as observed in 
-the classifiers training data, and the description of the procedure 
+This is information on probe-sets used and their weightings,
+means, standard deviations and covariance structure as observed in
+the classifiers training data, and the description of the procedure
 on how to preprocess new data prior to application of the classifier.
 }
 \section{Slots}{
@@ -20,7 +20,7 @@ on how to preprocess new data prior to application of the classifier.
 
 \item{\code{citations}}{A character vector of citations to literature}
 
-\item{\code{normalizationMethod}}{A character string indicating the normalization 
+\item{\code{normalizationMethod}}{A character string indicating the normalization
 method to apply}
 
 \item{\code{eventChain}}{A list of preprocessing steps}
@@ -31,18 +31,15 @@ method to apply}
 
 \item{\code{weights}}{A numeric vector}
 
-\item{\code{decisionBoundaries}}{A numeric vector with values that separate 
+\item{\code{decisionBoundaries}}{A numeric vector with values that separate
 the risk-groups}
 
 \item{\code{doRun}}{A function which is called for the actual classification}
 
-\item{\code{data}}{A locked environment in which - if available - the expression 
-matrix is stored.}
-
-\item{\code{means}}{A numeric vector of probe-set means as observed in the 
+\item{\code{means}}{A numeric vector of probe-set means as observed in the
 trainingsset (if available)}
 
-\item{\code{sds}}{A numeric vector of probe-set standard deviations as observed 
+\item{\code{sds}}{A numeric vector of probe-set standard deviations as observed
 in the trainingsset (if available)}
 
 \item{\code{.geneClassifierVersion}}{An object of class \code{\link{package_version}}}

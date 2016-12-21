@@ -20,13 +20,13 @@ A vector of orderd factors with classifications per sample
 \code{getClassifications} returns the resulting classifications.
 }
 \examples{
-data(exampleMAS5)
 myData <- setNormalizationMethod(exampleMAS5, "MAS5.0",targetValue=500)
 results <- runClassifier('EMC92', myData)
 getScores( results )
 getClassifications( results )
 }
 \seealso{
-Other classifier results: \code{\link{getScores}}
+Other classifier results: \code{\link{getBatchCorrection}},
+  \code{\link{getScores}}, \code{\link{getWeightingType}}
 }
 

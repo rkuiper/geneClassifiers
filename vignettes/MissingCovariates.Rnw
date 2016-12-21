@@ -50,8 +50,6 @@ We set $m=92$, $n=350$ and generate two independent matrices $\boldsymbol{X}_{tr
 
 In Figure \ref{ProofOfPrinciple1} the complete, reduced and reweighted model outcomes are plotted for increasing correlations. A sensitivity analysis of these results is performed by repeating the above procedure 1000$\times$. The correlations and intra-class correlations between the incomplete and complete models obtained are shown in Figure \ref{ProofOfPrinciple2}. The outcomes of the complete model correlate better to outcomes of the reweighted model than to those of the reduced model, as long as the missing covariates have shared variation to the non-missing covariates.
 
-
-
 \begin{figure}[H]
 \centering
 \includegraphics[trim=0cm 5cm 0cm 5cm, clip=true, scale=0.55]{Figures/ProofOfConcept1.pdf}

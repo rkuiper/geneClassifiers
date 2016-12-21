@@ -30,7 +30,7 @@ getClassifications( results )
 }
 \seealso{
 Other workflow functions: \code{\link{getNormalizationMethod}},
-    \code{\link{runClassifier}},
-    \code{\link{setNormalizationMethod}}
+  \code{\link{runClassifier}},
+  \code{\link{setNormalizationMethod}}
 }
 

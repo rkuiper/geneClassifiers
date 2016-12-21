@@ -1,16 +1,12 @@
-#' UAMS70 training set
-#'
-#' An \code{\link{ExpressionSet}}. The data was MAS5.0 normalized to a target value of 500 and log2 transformed.
-#'
-
-"UAMS70_ExpressionSet_training"
-
 .classifierHookList[[length(.classifierHookList)+1]]<-
 function(infoOnly=TRUE,...){
     name="UAMS70"
     normalizationMethod="MAS5.0"
     description="A risk classifier for multiple myeloma"
-    probeNames<-c(
+    hasTrainingData = TRUE
+
+    weights<-c(rep(1/51,51),rep(-1/19,19))
+    names(weights)<-c(
         '202345_s_at','1555864_s_at','204033_at',
         '206513_at','1555274_a_at',
         '211576_s_at','204016_at','1565951_s_at','219918_s_at','201947_s_at',
@@ -27,7 +23,6 @@ function(infoOnly=TRUE,...){
         '1557277_a_at','1554736_at','218924_s_at','226954_at','202838_at',
         '230192_at','48106_at','237964_at','202729_s_at','212435_at'
     )
-    weights<-c(rep(1/51,51),rep(-1/19,19))
     intercept<-0
     #means are based on the mas5 log2 data
     means<-c(
@@ -87,18 +82,18 @@ function(infoOnly=TRUE,...){
     if(infoOnly) {
         return( c( "name"=name ,"normalizationMethod"=  normalizationMethod ,"description"=description) )
     }
-    new("ClassifierParameters",
+    ClassifierParameters(
         name=name,
         description=description,
         normalizationMethod=normalizationMethod,
         weights=weights,
         intercept=intercept,
-        probeNames=probeNames,
         means = means,
         sds = sds,
         decisionBoundaries=decisionBoundaries,
         doRun=doRun,
         citations = citations,
-        eventChain=eventChain
+        eventChain=eventChain,
+        hasTrainingData=hasTrainingData
     )
 }

@@ -1,8 +1,8 @@
 Package: geneClassifiers
 Type: Package
 Title: Application of gene classifiers
-Version: 0.99.5
-Date: 2016-11-08
+Version: 0.99.6
+Date: 2016-12-20
 Author: R.Kuiper
 Maintainer: R.Kuiper <r.kuiper.emc@gmail.com>
 Description: This packages aims for easy accessible application 
@@ -16,7 +16,9 @@ Imports:
     stats,
     Biobase,
     BiocGenerics
+Suggests: testthat
 Collate:
+	aaa.R
     allGenericFunctions.R
     Class_TransformationProcess.R
     Class_FixedExpressionData.R
@@ -33,4 +35,6 @@ Collate:
     zzz.R
 biocViews: GeneExpression, BiomedicalInformatics, Classification, Survival,
     Microarray
+LazyData: true
 RoxygenNote: 5.0.1
+Suggests: testthat

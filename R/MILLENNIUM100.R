@@ -1,38 +1,11 @@
-#' MILLENNIUM100 training set:
-#'
-#' An \code{\link{ExpressionSet}}. This is data from AffyPlus2 A and B chips which were
-#' MAS5.0 normalized to a target value of 500. Afterwards they were merged together,log2
-#' transformed and a scaling toward mean=0, sd=1 per probe set was applied.
 
-"MILLENNIUM100_ExpressionSet_training"
 .classifierHookList[[length(.classifierHookList)+1]]<-
 function(infoOnly=TRUE,...){
     name="MILLENNIUM100"
     normalizationMethod="MAS5.0"
     description="A risk classifier for multiple myeloma based on Affy HG-U133 A/B chip"
-    probeNames<-c(
-        "204944_at", "210394_x_at", "225105_at",
-        "204430_s_at", "227126_at", "221601_s_at", "206626_x_at", "211425_x_at",
-        "210497_x_at", "211674_x_at", "218695_at", "216471_x_at", "203828_s_at",
-        "226219_at", "232231_at", "225548_at", "205718_at", "221602_s_at",
-        "220565_at", "209942_x_at", "218529_at", "207666_x_at", "212281_s_at",
-        "223743_s_at", "241224_x_at", "225213_at", "223625_at", "227212_s_at",
-        "214612_x_at", "212680_x_at", "224579_at", "225400_at", "218826_at",
-        "206640_x_at", "229826_at", "212750_at", "220448_at", "208416_s_at",
-        "205592_at", "223670_s_at", "210746_s_at", "201131_s_at", "227654_at",
-        "211820_x_at", "205838_at", "208335_s_at", "209930_s_at", "209301_at",
-        "215811_at", "205268_s_at", "232232_s_at", "223669_at", "202219_at",
-        "205950_s_at", "205837_s_at", "211821_x_at", "210395_x_at", "219672_at",
-        "206488_s_at", "215819_s_at", "205671_s_at", "210504_at", "216054_x_at",
-        "236981_at", "226751_at", "235916_at", "204249_s_at", "205033_s_at",
-        "206937_at", "242197_x_at", "210036_s_at", "210215_at", "208352_x_at",
-        "210986_s_at", "217865_at", "37986_at", "200934_at", "210430_x_at",
-        "214464_at", "206093_x_at", "203662_s_at", "210586_x_at", "209555_s_at",
-        "215449_at", "202201_at", "206283_s_at", "221627_at", "206145_at",
-        "206077_at", "205390_s_at", "205391_x_at", "208886_at","237403_at",
-        "225061_at","216333_x_at","208353_x_at","213451_x_at","207087_x_at",
-        "209160_at","205262_at"
-    )
+    hasTrainingData = TRUE
+
     #training set MAS5.0 log2 means
     means<-c(
         6.73109703826001,7.90817963565712,8.73884773652683,
@@ -117,6 +90,29 @@ function(infoOnly=TRUE,...){
         -2.55,-2.55,-2.56,-2.57,-2.57,-2.61,-2.61,-2.61,-2.62,-2.64,
         -2.65,-2.67,-2.68,-2.69,-2.69,-2.69,-2.70,-2.72,-2.74,-2.77,
         -2.78,-2.79,-2.82,-2.88,-2.88,-2.91,-2.96,-2.97,-3.07,-3.22)
+    names(weights)<-c(
+        "204944_at", "210394_x_at", "225105_at",
+        "204430_s_at", "227126_at", "221601_s_at", "206626_x_at", "211425_x_at",
+        "210497_x_at", "211674_x_at", "218695_at", "216471_x_at", "203828_s_at",
+        "226219_at", "232231_at", "225548_at", "205718_at", "221602_s_at",
+        "220565_at", "209942_x_at", "218529_at", "207666_x_at", "212281_s_at",
+        "223743_s_at", "241224_x_at", "225213_at", "223625_at", "227212_s_at",
+        "214612_x_at", "212680_x_at", "224579_at", "225400_at", "218826_at",
+        "206640_x_at", "229826_at", "212750_at", "220448_at", "208416_s_at",
+        "205592_at", "223670_s_at", "210746_s_at", "201131_s_at", "227654_at",
+        "211820_x_at", "205838_at", "208335_s_at", "209930_s_at", "209301_at",
+        "215811_at", "205268_s_at", "232232_s_at", "223669_at", "202219_at",
+        "205950_s_at", "205837_s_at", "211821_x_at", "210395_x_at", "219672_at",
+        "206488_s_at", "215819_s_at", "205671_s_at", "210504_at", "216054_x_at",
+        "236981_at", "226751_at", "235916_at", "204249_s_at", "205033_s_at",
+        "206937_at", "242197_x_at", "210036_s_at", "210215_at", "208352_x_at",
+        "210986_s_at", "217865_at", "37986_at", "200934_at", "210430_x_at",
+        "214464_at", "206093_x_at", "203662_s_at", "210586_x_at", "209555_s_at",
+        "215449_at", "202201_at", "206283_s_at", "221627_at", "206145_at",
+        "206077_at", "205390_s_at", "205391_x_at", "208886_at","237403_at",
+        "225061_at","216333_x_at","208353_x_at","213451_x_at","207087_x_at",
+        "209160_at","205262_at"
+    )
     intercept<-0
     decisionBoundaries<-0.5
     citations<-list("G. Mulligan, C. Mitsiades, B. BryantGene, et al.; Expression profiling and correlation with outcome in clinical trials of the proteasome inhibitor bortezomib; Blood Apr 2007, 109 (8) 3177-3188; DOI: 10.1182/blood-2006-09-044974")
@@ -135,18 +131,18 @@ function(infoOnly=TRUE,...){
     if(infoOnly) {
         return( c( "name"=name ,"normalizationMethod"=  normalizationMethod ,"description"=description) )
     }
-    new("ClassifierParameters",
+    ClassifierParameters(
         name=name,
         description=description,
         normalizationMethod=normalizationMethod,
         weights=weights,
         intercept=intercept,
-        probeNames=probeNames,
         means = means,
         sds = sds,
         decisionBoundaries=decisionBoundaries,
         doRun=doRun,
         citations = citations,
-        eventChain=eventChain
+        eventChain=eventChain,
+        hasTrainingData=hasTrainingData
     )
 }

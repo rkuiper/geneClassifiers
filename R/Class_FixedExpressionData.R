@@ -1,4 +1,3 @@
-
 #' @aliases getNormalizationMethods
 #' @title Show currenly implemented normalization methods.
 #'
@@ -33,7 +32,7 @@ getNormalizationMethods<-function(){
 
 #' Example MAS5.0 ExpressionSet
 #'
-#' An \code{\link{ExpressionSet}}. The data contains a sample of gene expression data from
+#'An \code{\link{ExpressionSet}}. The data contains a sample of gene expression data from
 #'patients included in the HOVON65/GMMG-HD4 trial on multiple myeloma. The data was MAS5.0
 #'normalized to a target value of 500.
 #'
@@ -64,15 +63,28 @@ setClass("FixedExpressionData",
         normalizationParameters="list",
         transformationProcess="environment",
         .geneClassifierVersion="package_version"
-    )
+    ),prototype=list(
+    .geneClassifierVersion = packageVersionInternal()
+    ),validity=function(object) {
+        errTxt<-vector()
+        if (!getNormalizationMethod(object)%in%getNormalizationMethods()){errTxt<-c(errTxt,"Unknown normalization method")}
+        if (!is.list(getTransformationProcesses(object))){errTxt<-c(errTxt,"Unknown transformationProcess type")}
+
+        if (getNormalizationMethod(object)=="MAS5.0") {
+            if  (is.null(getNormalizationParameters(object)[["targetValue"]])) {errTxt<-c(errTxt,"targetValue must be given for MAS5.0") }
+        }
+        if (length(errTxt)>0) {return(errTxt)}
+        return(TRUE)
+    }
 )
 
 #' @importFrom utils packageVersion packageName
 #' @importFrom stats quantile
-setMethod("initialize",
-    signature  = signature(.Object = "FixedExpressionData"),
-    definition = function(.Object, ...){
-        dotList <- list(...)
+setMethod("FixedExpressionData",
+    signature  = signature(normalizationMethod="character",expressionMatrix="matrix"),
+    definition = function(normalizationMethod,expressionMatrix,...){
+        dotList<-list(...)
+        normalizationMethod<-match.arg(normalizationMethod,getNormalizationMethods())
         .getTargetValue<-function(expressionMatrix){
             ##expressionMatrix must be not log2 transformed!
             e<-t(expressionMatrix)
@@ -86,43 +98,36 @@ setMethod("initialize",
         .isAlreadylog2Transformed.check<-function(expressionMatrix){
             storedSeed<-.Random.seed
             set.seed(1)
-        aSample<-sample(expressionMatrix,1e5,replace=TRUE)
-        .Random.seed<-storedSeed
+            aSample<-sample(expressionMatrix,1e5,replace=TRUE)
+            .Random.seed<-storedSeed
             isLog2Transformed<-as.logical(quantile(aSample,0.75,na.rm=TRUE)<30 | any(expressionMatrix<0))
             return(isLog2Transformed)
         }
-        if (!is.matrix(dotList[["expressionMatrix"]])){
+        if (!is.matrix(expressionMatrix)){
             stop("'expressionMatrix' must be a numeric matrix.")
         }
-        if (mode(dotList[["expressionMatrix"]])!="numeric"){
+        if (mode(expressionMatrix)!="numeric"){
             stop("'expressionMatrix' must be numeric.")
         }
-        if (is.null(rownames(dotList[["expressionMatrix"]])) | is.null(colnames(dotList[["expressionMatrix"]]))){
+        if (is.null(rownames(expressionMatrix)) | is.null(colnames(expressionMatrix))){
             stop("'expressionMatrix' must have row and column names.")
         }
-        if (sum(duplicated(rownames(dotList[["expressionMatrix"]])))>0 ) {
+        if (sum(duplicated(rownames(expressionMatrix)))>0 ) {
             stop("duplicated row names found.")
         }
-        if (sum(duplicated(colnames(dotList[["expressionMatrix"]])))>0) {
+        if (sum(duplicated(colnames(expressionMatrix)))>0) {
             stop("duplicated column names found.")
         }
-        if (is.null(dotList[["normalizationMethod"]])){
-            stop("'normalizationMethod' must be one of: ", paste(getNormalizationMethods(),collapse=", "))
-        }
-        if (!dotList[["normalizationMethod"]] %in% getNormalizationMethods()){
-            stop("'normalizationMethod' must be one of: ", paste(getNormalizationMethods(),collapse=", "))
-        }
-        .Object@normalizationMethod = dotList[["normalizationMethod"]]
-        .Object@expressionEnvironment<-new.env()
-        .Object@expressionEnvironment[["expressionMatrix"]]<-dotList[["expressionMatrix"]]
-        .Object@.geneClassifierVersion = packageVersion(packageName())
-        .Object@normalizationParameters<-list()
-        .Object@transformationProcess<-new.env()
-        .Object@transformationProcess[["processes"]]<-list()
+
+        expressionEnvironment<-new.env()
+        expressionEnvironment[["expressionMatrix"]]<-expressionMatrix
+        normalizationParameters<-list()
+        transformationProcess<-new.env()
+        transformationProcess[["processes"]]<-list()
 
         ##Normalization method specific code:
-        if (.Object@normalizationMethod == "MAS5.0"){
-            calculatedEstimate<-.isAlreadylog2Transformed.check(.Object@expressionEnvironment[["expressionMatrix"]])
+        if (normalizationMethod == "MAS5.0"){
+            calculatedEstimate<-.isAlreadylog2Transformed.check(expressionEnvironment[["expressionMatrix"]])
             if (!is.null(dotList[["isLog2Transformed"]])) {
                 if(dotList[["isLog2Transformed"]]!=calculatedEstimate) {
                     warning("Reconsider argument isLog2Transformed = ",dotList[["isLog2Transformed"]])
@@ -134,18 +139,17 @@ setMethod("initialize",
                 }
             }
             if (dotList[["isLog2Transformed"]]){
-                 .Object@expressionEnvironment[["expressionMatrix"]]<-2^.Object@expressionEnvironment[["expressionMatrix"]]
+                 expressionEnvironment[["expressionMatrix"]]<-2^expressionEnvironment[["expressionMatrix"]]
             }
 
- 
-            calculatedTargetValue<-.getTargetValue(.Object@expressionEnvironment[["expressionMatrix"]])
+            calculatedTargetValue<-.getTargetValue(expressionEnvironment[["expressionMatrix"]])
             if (!is.null(dotList[["targetValue"]])){
-        if (!is.numeric(dotList[["targetValue"]])){
+                if (!is.numeric(dotList[["targetValue"]])){
                     stop("targetValue must be a positive numeric value")
-        }
+                }
                 if (dotList[["targetValue"]]<=0){
                     stop("targetValue must be a positive numeric value")
-        }
+                }
             }
             if (!is.null(dotList[["targetValue"]]) & !is.numeric(dotList[["targetValue"]])){
                 stop("targetValue must be a positive numeric value")
@@ -159,13 +163,16 @@ setMethod("initialize",
             } else if (is.null(dotList[["targetValue"]]) & !is.null(calculatedTargetValue)) {
                 dotList[["targetValue"]]<-calculatedTargetValue
             }
-            .Object@normalizationParameters[["targetValue"]]<- dotList[["targetValue"]]
+            normalizationParameters[["targetValue"]]<- dotList[["targetValue"]]
         }
-        if (.Object@normalizationMethod == "GCRMA"){
-        }
-        lockEnvironment(.Object@expressionEnvironment,bindings=TRUE)
-        lockEnvironment(.Object@transformationProcess,bindings=TRUE)
-        return(.Object)
+        if (normalizationMethod == "GCRMA"){}
+        lockEnvironment(expressionEnvironment,bindings=TRUE)
+        lockEnvironment(transformationProcess,bindings=TRUE)
+        new("FixedExpressionData",normalizationMethod=normalizationMethod, 
+            expressionEnvironment= expressionEnvironment,
+            normalizationParameters=normalizationParameters,
+            transformationProcess=transformationProcess
+        )
     }
 )
 
@@ -175,16 +182,14 @@ setMethod("show",
         cat("____________________\n")
         cat("Fixed expression set\n\n")
         cat("Normalization method: ",getNormalizationMethod(object),"\n")
-    cat("Number of samples   : ",dim(object)[2],"\n")
-    cat("Number of features  : ",dim(object)[1],"\n")
-    tp<-getTransformationProcesses(object)
-    if (length(tp)>0){
-        tpNames<-lapply(getTransformationProcesses(object),getName)
-        tpNames<-paste(unlist(tpNames),collapse="; ")
-        cat("Applied transformation processes: ",tpNames,"\n")
-    }
-
-
+        cat("Number of samples   : ",dim(object)[2],"\n")
+        cat("Number of features  : ",dim(object)[1],"\n")
+        tp<-getTransformationProcesses(object)
+        if (length(tp)>0){
+            tpNames<-lapply(getTransformationProcesses(object),getName)
+            tpNames<-paste(unlist(tpNames),collapse="; ")
+            cat("Applied transformation processes: ",tpNames,"\n")
+        }
     }
 )
 
@@ -193,7 +198,7 @@ setMethod("show",
 setMethod("addTransformationProcess",
     signature  = signature(object="FixedExpressionData",name="character"),
     definition = function(object,name,values,...){
-        process<-new("TransformationProcess", name = name, values = values )
+        process<-TransformationProcess(name = name, values = values )
         aData <- copyEnv( object@transformationProcess )
         curLen <- length(aData[["processes"]])
         aData[["processes"]][[curLen+1]] <- process
@@ -215,9 +220,8 @@ setMethod("removeTransformationProcesses",
     signature  = signature(object="FixedExpressionData"),
     definition = function(object,n=1){
         aData <- copyEnv(object@transformationProcess)
-    curLen<-length(aData[["processes"]])
+        curLen<-length(aData[["processes"]])
         n<-min(n,curLen)
-
         aData[["processes"]]<-aData[["processes"]][seq_len(max(0,curLen-n))]
         lockEnvironment(aData,bindings=TRUE)
         object@transformationProcess<-aData
@@ -381,8 +385,8 @@ setMethod("[[",
     definition = function(x, i, j, ...) {
         dotList<-list(normalizationMethod=getNormalizationMethod(x),
         expressionMatrix=rawExprs(x)[i,j,...])
-        dotList<-c(dotList,x@normalizationParameters)
-        newObject<-do.call("new",c("FixedExpressionData",dotList))
+        dotList<-c(dotList,getNormalizationParameters(x))
+        newObject<-do.call(FixedExpressionData,dotList)
         oldProcesses<-getTransformationProcesses(x)
         for (process in oldProcesses){
             newObject<-addTransformationProcess(newObject,name=getName(process),values=getValues(process))

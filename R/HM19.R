@@ -1,20 +1,9 @@
-#' HM19 training set:
-#'
-#' An \code{\link{ExpressionSet}}. The data was GCRMA normalized.
-#'
-"HM19_ExpressionSet_training"
-
 .classifierHookList[[length(.classifierHookList)+1]]<-
 function(infoOnly=TRUE,...){
     name="HM19"
     normalizationMethod="GCRMA"
     description="A risk classifier for multiple myeloma"
-    probeNames<-c(
-    '203755_at'  , '218460_at' , '226936_at' , '219855_at'  , '233660_at' ,
-    '203358_s_at', '203764_at' , '218726_at' , '221520_s_at','234672_s_at',
-    '214464_at'  , '226980_at' , '225687_at' , '229553_at'  ,'219978_s_at',
-    '225272_at'  , '235353_at' , '204031_s_at','220945_x_at'
-)
+    hasTrainingData = TRUE
     #means are based on the mas5 log2 data
     means<-c(
         5.80843379667409,9.23160864112744,6.12584428860212,
@@ -36,6 +25,12 @@ function(infoOnly=TRUE,...){
         2.03505832355478
     )
     weights<-c(rep(1,15), rep(-1,4))
+    names(weights)<-c(
+    '203755_at'  , '218460_at' , '226936_at' , '219855_at'  , '233660_at' ,
+    '203358_s_at', '203764_at' , '218726_at' , '221520_s_at','234672_s_at',
+    '214464_at'  , '226980_at' , '225687_at' , '229553_at'  ,'219978_s_at',
+    '225272_at'  , '235353_at' , '204031_s_at','220945_x_at'
+    )
     intercept<-0
     decisionBoundaries<-c(28.4,54.6)
     citations<-list("Reme T, Hose D, Theillet C, Klein B. Modeling risk stratification in human cancer. Bioinformatics. 2013;29(9):1149-1157")
@@ -51,18 +46,18 @@ function(infoOnly=TRUE,...){
     if(infoOnly) {
         return( c( "name"=name ,"normalizationMethod"=  normalizationMethod ,"description"=description) )
     }
-    new("ClassifierParameters",
+    ClassifierParameters(
         name=name,
         description=description,
         normalizationMethod=normalizationMethod,
         weights=weights,
         intercept=intercept,
-        probeNames=probeNames,
         means = means,
         sds = sds,
         decisionBoundaries=decisionBoundaries,
         doRun=doRun,
         citations = citations,
-        eventChain=eventChain
+        eventChain=eventChain,
+        hasTrainingData=hasTrainingData
     )
 }

@@ -11,14 +11,14 @@ getProbeNames(object)
 \S4method{getProbeNames}{ClassifierParameters}(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link{ClassifierParameters}} 
+\item{object}{An object of class \code{\link{ClassifierParameters}}
 as returned by \code{\link{getClassifier}}}
 }
 \value{
 The return value is a character vector of probe-set names.
 }
 \description{
-\code{getProbeNames} returns the probe names associated with 
+\code{getProbeNames} returns the probe names associated with
 the requested classifier.
 }
 \examples{
@@ -29,11 +29,13 @@ getProbeNames( aClassifier )
 \code{\link{ClassifierParameters}}
 
 Other classifier information functions: \code{\link{getCitations}},
-    \code{\link{getClassifier}},
-    \code{\link{getDecisionBoundaries}},
-    \code{\link{getDescription}},
-    \code{\link{getEventChain}}, \code{\link{getIntercept}},
-    \code{\link{getNormalizationMethod}},
-    \code{\link{getTrainingData}}, \code{\link{getWeights}}
+  \code{\link{getClassifier}},
+  \code{\link{getDecisionBoundaries}},
+  \code{\link{getDescription}},
+  \code{\link{getEventChain}}, \code{\link{getIntercept}},
+  \code{\link{getMeans}},
+  \code{\link{getNormalizationMethod}},
+  \code{\link{getSds}}, \code{\link{getTrainingData}},
+  \code{\link{getWeights}}
 }
 

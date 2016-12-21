@@ -17,7 +17,7 @@ getScores(object)
 A numeric vector with scores per sample
 }
 \description{
-\code{getScores} returns the resulting scores from a classifier 
+\code{getScores} returns the resulting scores from a classifier
 run
 }
 \examples{
@@ -28,6 +28,8 @@ getScores( results )
 getClassifications( results )
 }
 \seealso{
-Other classifier results: \code{\link{getClassifications}}
+Other classifier results: \code{\link{getBatchCorrection}},
+  \code{\link{getClassifications}},
+  \code{\link{getWeightingType}}
 }
 

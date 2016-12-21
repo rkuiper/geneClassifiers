@@ -24,23 +24,27 @@ setClass("ClassifierResults",
         batchCorrection="logical",
         weightingType='character',
         .geneClassifierVersion="package_version"
+    ),prototype=list(
+        .geneClassifierVersion = packageVersionInternal()
     )
 )
 
-#' @importFrom utils packageVersion packageName
-setMethod("initialize", signature(.Object = "ClassifierResults"),
-    function(.Object, ...){
-        x <- list(...)
-        if (is.null(x[["weightingType"]])) stop('weightingType must be given')
-        if (is.null(x[["batchCorrection"]])) stop('batchCorrection must be given')
-        if (is.null(x[["score"]])) stop('score must be given')
-        if (!(x[["weightingType"]]%in%c("complete","reweighted"))) stop('weightingType should be one of: complete, reweighted')
-        .Object@weightingType = x[["weightingType"]]
-        .Object@score = x[["score"]]
-        .Object@classifierParameters = x[["classifierParameters"]]
-        .Object@batchCorrection = x[["batchCorrection"]]
-        .Object@.geneClassifierVersion = packageVersion(packageName())
-        return(.Object)
+
+
+setMethod("ClassifierResults", 
+    signature = signature(
+        weightingType = "character",
+        batchCorrection = "logical",
+        score="numeric",
+        classifierParameters="ClassifierParameters"),
+    definition = function(weightingType,batchCorrection,score,classifierParameters){
+        match.arg(weightingType,c("complete","reweighted"))
+        new("ClassifierResults",
+            classifierParameters=classifierParameters,
+            score=score,
+            batchCorrection=batchCorrection,
+            weightingType=weightingType
+        )
     }
 )
 
@@ -64,11 +68,33 @@ setMethod("getClassifier",
     }
 )
 
+
+#' @rdname getBatchCorrection-methods
+#' @aliases getBatchCorrection,ClassifierResults-method
+#' @export
+setMethod("getBatchCorrection",
+    signature  = signature(object = "ClassifierResults"),
+    definition = function(object){
+        return(object@batchCorrection)
+    }
+)
+
+
+#' @rdname getWeightingType-methods
+#' @aliases getWeightingType,ClassifierResults-method
+#' @export
+setMethod("getWeightingType",
+    signature  = signature(object = "ClassifierResults"),
+    definition = function(object){
+        return(object@weightingType)
+    }
+)
+
 #' @rdname getName-methods
 #' @aliases getName,ClassifierResults-method
 #' @export
 setMethod("getName",
-    signature  = signature("ClassifierResults"),
+    signature  = signature(object = "ClassifierResults"),
     definition = function(object) {
         return(getName(getClassifier(object)))
     }
@@ -79,7 +105,7 @@ setMethod("getName",
 #' @export
 #' @importFrom utils as.roman
 setMethod("getClassifications",
-    signature  = signature("ClassifierResults"),
+    signature  = signature(object = "ClassifierResults"),
     definition = function(object) {
         boundaries<-getDecisionBoundaries( getClassifier(object) )
         classifications<-sapply(boundaries,FUN=function(x,y){y>x},y=getScores(object))
@@ -93,7 +119,7 @@ setMethod("getClassifications",
 )
 
 setMethod("show",
-    signature  = "ClassifierResults",
+    signature  = signature(object = "ClassifierResults"),
     definition = function(object){
         classifications<-getClassifications(object)
         riskGroup<-table(classifications)
@@ -104,8 +130,8 @@ setMethod("show",
             cat("\t",paste(">",boundary ,":",names(riskGroup)[-1]),"\n")
         }
         print(riskGroup)
-        cat("\n\tBatch corrected   :",c("no","yes")[object@batchCorrection+1],"\n")
-        cat("\tweighting type      :",object@weightingType,"\n")
+        cat("\n\tBatch corrected   :",c("no","yes")[getBatchCorrection(object)+1],"\n")
+        cat("\tweighting type      :",getWeightingType(object),"\n")
         cat("----------------\n")
     }
 )

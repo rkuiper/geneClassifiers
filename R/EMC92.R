@@ -1,48 +1,9 @@
-#' EMC92 training set
-#'
-#' An \code{\link{ExpressionSet}}. The data was MAS5.0 normalized to a target value of 500, log2 transformed, mean centered and scaled to unit variance.
-#'
-#' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE19784}
-"EMC92_ExpressionSet_training"
-
 .classifierHookList[[length(.classifierHookList)+1]]<-
 function(infoOnly=TRUE,...){
     name="EMC92"
     normalizationMethod="MAS5.0"
     description="A risk classifier for multiple myeloma"
-    probeNames<-c(
-        '204379_s_at','210334_x_at','201795_at',
-        '38158_at','201307_at','205046_at',
-        '204026_s_at','238662_at','220351_at',
-        '202542_s_at','243018_at','212282_at',
-        '208967_s_at','225366_at','217852_s_at',
-        '225601_at','231210_at','214482_at',
-        '219550_at','231989_s_at','202553_s_at',
-        '223811_s_at','221677_s_at','213350_at',
-        '200775_s_at','217728_at','211714_x_at',
-        '221755_at','AFFX-HUMISGF3A/M97935_MA_at','206204_at',
-        '214612_x_at','202813_at','200875_s_at',
-        '222680_s_at','233437_at','209026_x_at',
-        '221606_s_at','231738_at','202322_s_at',
-        '238116_at','211963_s_at','207618_s_at',
-        '221826_at','218355_at','218365_s_at',
-        '222713_s_at','222154_s_at','201102_s_at',
-        '202884_s_at','212055_at','202107_s_at',
-        '202728_s_at','239054_at','202842_s_at',
-        '213002_at','208232_x_at','226742_at',
-        '226218_at','217824_at','233399_x_at',
-        '224009_x_at','215177_s_at','202532_s_at',
-        '212788_x_at','209683_at','208942_s_at',
-        '221041_s_at','226217_at','201930_at',
-        '216473_x_at','217548_at','215181_at',
-        '217732_s_at','201292_at','223381_at',
-        '230034_x_at','213007_at','242180_at',
-        '208904_s_at','214150_x_at','208732_at',
-        '200701_at','208667_s_at','208747_s_at',
-        '218662_s_at','201555_at','200933_x_at',
-        '219510_at','228416_at','203145_at',
-        '238780_s_at','201398_s_at'
-    )
+    hasTrainingData = TRUE
     weights<-c(
         0.0594273379801556,0.0174897923948543,0.00668584689209701,
         0.0423154071076169,0.0164925076573208,0.00866233731636807,
@@ -75,6 +36,39 @@ function(infoOnly=TRUE,...){
         -0.0176248165093743,-0.0051520032747514,-0.0322581999457566,
         -0.00969926642147875,-0.0777964537268526,-0.00022873908620183,
         -0.0529393125922244,-0.0253569213540041
+    )
+    names(weights)<-c(
+        '204379_s_at','210334_x_at','201795_at',
+        '38158_at','201307_at','205046_at',
+        '204026_s_at','238662_at','220351_at',
+        '202542_s_at','243018_at','212282_at',
+        '208967_s_at','225366_at','217852_s_at',
+        '225601_at','231210_at','214482_at',
+        '219550_at','231989_s_at','202553_s_at',
+        '223811_s_at','221677_s_at','213350_at',
+        '200775_s_at','217728_at','211714_x_at',
+        '221755_at','AFFX-HUMISGF3A/M97935_MA_at','206204_at',
+        '214612_x_at','202813_at','200875_s_at',
+        '222680_s_at','233437_at','209026_x_at',
+        '221606_s_at','231738_at','202322_s_at',
+        '238116_at','211963_s_at','207618_s_at',
+        '221826_at','218355_at','218365_s_at',
+        '222713_s_at','222154_s_at','201102_s_at',
+        '202884_s_at','212055_at','202107_s_at',
+        '202728_s_at','239054_at','202842_s_at',
+        '213002_at','208232_x_at','226742_at',
+        '226218_at','217824_at','233399_x_at',
+        '224009_x_at','215177_s_at','202532_s_at',
+        '212788_x_at','209683_at','208942_s_at',
+        '221041_s_at','226217_at','201930_at',
+        '216473_x_at','217548_at','215181_at',
+        '217732_s_at','201292_at','223381_at',
+        '230034_x_at','213007_at','242180_at',
+        '208904_s_at','214150_x_at','208732_at',
+        '200701_at','208667_s_at','208747_s_at',
+        '218662_s_at','201555_at','200933_x_at',
+        '219510_at','228416_at','203145_at',
+        '238780_s_at','201398_s_at'
     )
     means<-c(
         5.96889007682478,6.62068561998897,11.5742591611091,8.25868305153311,
@@ -144,18 +138,18 @@ function(infoOnly=TRUE,...){
     if(infoOnly) {
         return( c( "name"=name ,"normalizationMethod"=  normalizationMethod ,"description"=description) )
     }
-    new("ClassifierParameters",
+    ClassifierParameters(
         name=name,
         description=description,
         normalizationMethod=normalizationMethod,
         weights=weights,
         intercept=intercept,
-        probeNames=probeNames,
         means = means,
         sds = sds,
         decisionBoundaries=decisionBoundaries,
         doRun=doRun,
         citations = citations,
-        eventChain=eventChain
+        eventChain=eventChain,
+        hasTrainingData=hasTrainingData
     )
 }

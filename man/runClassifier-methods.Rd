@@ -11,11 +11,11 @@
 runClassifier(classifierParameters, fixedExpressionData, ...)
 
 \S4method{runClassifier}{character,FixedExpressionData}(classifierParameters,
-    fixedExpressionData, ...)
+  fixedExpressionData, ...)
 
 
-    \S4method{runClassifier}{ClassifierParameters,FixedExpressionData}(
-    classifierParameters, fixedExpressionData, ...)
+  \S4method{runClassifier}{ClassifierParameters,FixedExpressionData}(classifierParameters,
+  fixedExpressionData, ...)
 }
 \arguments{
 \item{classifierParameters}{Either a text value indicating a
@@ -64,7 +64,7 @@ runClassifier("EMC92",myData)
 }
 \seealso{
 Other workflow functions: \code{\link{getNormalizationMethod}},
-    \code{\link{setNormalizationMethod}},
-    \code{\link{showClassifierList}}
+  \code{\link{setNormalizationMethod}},
+  \code{\link{showClassifierList}}
 }
 
