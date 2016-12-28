@@ -1,40 +1,31 @@
 Package: geneClassifiers
 Type: Package
 Title: Application of gene classifiers
-Version: 0.99.7
-Date: 2016-12-20
+Version: 0.99.8
+Date: 2016-12-28
 Author: R.Kuiper
 Maintainer: R.Kuiper <r.kuiper.emc@gmail.com>
-Description: This packages aims for easy accessible application 
-    of classifiers which have been published in literature using 
+Description: This packages aims for easy accessible application
+    of classifiers which have been published in literature using
     an ExpressionSet as input.
 License: GPL-2
-Depends:
-    methods,
-    utils
+biocViews: GeneExpression, BiomedicalInformatics, Classification, Survival,
+    Microarray
+LazyData: true
+Suggests:
+    testthat
+Depends: R (>= 3.3), utils
 Imports:
+    methods,
     stats,
     Biobase,
     BiocGenerics
-Suggests: testthat
 Collate:
-	aaa.R
+    aaa.R
     allGenericFunctions.R
     Class_TransformationProcess.R
     Class_FixedExpressionData.R
     Class_ClassifierParameters.R
     Class_ClassifierResults.R
-    EMC92.R
-    UAMS70.R
-    UAMS17.R
-    UAMS80.R
-    HM19.R
-    IFM15.R
-    MRCIX6.R
-    MILLENNIUM100.R
     zzz.R
-biocViews: GeneExpression, BiomedicalInformatics, Classification, Survival,
-    Microarray
-LazyData: true
 RoxygenNote: 5.0.1
-Suggests: testthat

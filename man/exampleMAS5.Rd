@@ -15,4 +15,3 @@ patients included in the HOVON65/GMMG-HD4 trial on multiple myeloma. The data wa
 normalized to a target value of 500.
 }
 \keyword{datasets}
-
