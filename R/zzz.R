@@ -1,10 +1,3 @@
-
-
-.onAttach<-function(libname, pkgname) {
-    packageStartupMessage('See vignette("geneClassifiers") for help')
-}
-.onLoad<-function(libname, pkgname) {}
-
 #' @aliases showClassifierList
 #' @title Show classifier names and descriptions.
 #'

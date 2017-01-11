@@ -1,8 +1,8 @@
 Package: geneClassifiers
 Type: Package
 Title: Application of gene classifiers
-Version: 0.99.8
-Date: 2016-12-28
+Version: 0.99.9
+Date: 2017-12-11
 Author: R.Kuiper
 Maintainer: R.Kuiper <r.kuiper.emc@gmail.com>
 Description: This packages aims for easy accessible application
@@ -14,7 +14,7 @@ biocViews: GeneExpression, BiomedicalInformatics, Classification, Survival,
 LazyData: true
 Suggests:
     testthat
-Depends: R (>= 3.3), utils
+Depends: utils
 Imports:
     methods,
     stats,
