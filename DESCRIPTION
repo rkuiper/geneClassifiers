@@ -1,7 +1,7 @@
 Package: geneClassifiers
 Type: Package
 Title: Application of gene classifiers
-Version: 1.4.0
+Version: 1.5.0
 Date: 2017-12-11
 Author: R Kuiper
 Maintainer: R Kuiper <r.kuiper.emc@gmail.com>
