@@ -5,7 +5,7 @@
 #'
 #' @param normalizations an optional text argument of one or more normalization methods in order to filter the classifiers to be shown.
 #'
-#' @return A data.frame with columns: "name","normalizationMethod" and "description"
+#' @return A data.frame with columns: 'name','normalizationMethod' and 'description'
 #'
 #' @details The names of the classifiers shown can be used as input for the \code{\link{runClassifier}} function and the \code{\link{getClassifier}} function.
 #'
@@ -17,33 +17,34 @@
 #' @examples
 #' showClassifierList()
 #' data(exampleMAS5)
-#' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0",targetValue=500)
+#' myData <- setNormalizationMethod(exampleMAS5, 'MAS5.0',targetValue=500)
 #' results <- runClassifier('UAMS70', myData)
 #' getScores( results )
 #' getClassifications( results )
 #'
 #' @export
-showClassifierList<-function(normalizations){
-    registeredClassifiers<-lapply(.classifierHookList,function(x){x()})
-    registeredClassifiers<-t(simplify2array(registeredClassifiers))
-    if (!missing(normalizations)){
-        normalizations<-match.arg(toupper(normalizations),getNormalizationMethods(),several.ok=TRUE)
-        registeredClassifiers<-registeredClassifiers[registeredClassifiers[,"normalizationMethod"]%in%normalizations,,drop=FALSE]
+showClassifierList <- function(normalizations) {
+    registeredClassifiers <- lapply(.classifierHookList, function(x) {
+        x()
+    })
+    registeredClassifiers <- t(simplify2array(registeredClassifiers))
+    if (!missing(normalizations)) {
+        normalizations <- match.arg(toupper(normalizations), getNormalizationMethods(), 
+            several.ok = TRUE)
+        registeredClassifiers <- registeredClassifiers[registeredClassifiers[, "normalizationMethod"] %in% 
+            normalizations, , drop = FALSE]
     }
     return(registeredClassifiers)
 }
 
 #' @rdname getClassifier-methods
 #' @aliases getClassifier,character-method
-setMethod("getClassifier",
-    signature  = signature(value = "character"),
-    definition = function(value){
-    classifierName<-match.arg(value,showClassifierList()[,"name"])
-    idx<-which(showClassifierList()[,"name"]==classifierName)
-    classifierParameters<- .classifierHookList[[idx]](infoOnly=FALSE)
+setMethod("getClassifier", signature = signature(value = "character"), definition = function(value) {
+    classifierName <- match.arg(value, showClassifierList()[, "name"])
+    idx <- which(showClassifierList()[, "name"] == classifierName)
+    classifierParameters <- .classifierHookList[[idx]](infoOnly = FALSE)
     classifierParameters
-    }
-)
+})
 
 #' @aliases setNormalizationMethod
 #' @title Prepare data.
@@ -77,22 +78,20 @@ setMethod("getClassifier",
 #'
 #' @examples
 #' data(exampleMAS5)
-#' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0",targetValue=500)
+#' myData <- setNormalizationMethod(exampleMAS5, 'MAS5.0',targetValue=500)
 #' results <- runClassifier('EMC92', myData)
 #' getScores( results )
 #' getClassifications( results )
 #'
 #' @importFrom methods new
 #' @export
-setNormalizationMethod<-function(expressionSet, method, ...){
-    if (!inherits(expressionSet,"ExpressionSet")) {
+setNormalizationMethod <- function(expressionSet, method, ...) {
+    if (!inherits(expressionSet, "ExpressionSet")) {
         stop("Expect argument 'expressionSet' to be an object of type ExpressionSet")
     }
-    method <- match.arg( toupper(method), getNormalizationMethods() )
+    method <- match.arg(toupper(method), getNormalizationMethods())
     dotList <- list(...)
-    FixedExpressionData(
-        normalizationMethod=method,
-        expressionMatrix=exprs(expressionSet),
+    FixedExpressionData(normalizationMethod = method, expressionMatrix = exprs(expressionSet), 
         ...)
     
 }

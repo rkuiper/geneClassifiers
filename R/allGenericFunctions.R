@@ -1,26 +1,23 @@
-.classifierHookList<-list()
-
-setGeneric("FixedExpressionData",
-    function(normalizationMethod,expressionMatrix,...){
-        standardGeneric ("FixedExpressionData")
+setGeneric("FixedExpressionData", function(normalizationMethod, expressionMatrix, 
+    ...) {
+    standardGeneric("FixedExpressionData")
 })
 
-setGeneric("ClassifierResults", 
-    function(weightingType,batchCorrection,score,classifierParameters){
-        standardGeneric ("ClassifierResults")
+setGeneric("ClassifierResults", function(weightingType, batchCorrection, score, classifierParameters) {
+    standardGeneric("ClassifierResults")
 })
 
-setGeneric("ClassifierParameters",   
-    function(name, doRun, hasTrainingData, normalizationMethod, weights, description="",intercept=NULL,means=NULL,sds=NULL,decisionBoundaries=NULL,eventChain = NULL,citations=NULL){
-        standardGeneric ("ClassifierParameters")
+setGeneric("ClassifierParameters", function(name, doRun, hasTrainingData, normalizationMethod, 
+    weights, description = "", intercept = NULL, means = NULL, sds = NULL, decisionBoundaries = NULL, 
+    eventChain = NULL, citations = NULL) {
+    standardGeneric("ClassifierParameters")
 })
 
-setGeneric("TransformationProcess", 
-    function(name,values,...){
-        standardGeneric ("TransformationProcess")
+setGeneric("TransformationProcess", function(name, values, ...) {
+    standardGeneric("TransformationProcess")
 })
 
-##############################################################
+############################################################## 
 #' Obtain classifier score.
 #'
 #' \code{getScores} returns the resulting scores from a classifier
@@ -38,16 +35,15 @@ setGeneric("TransformationProcess",
 #'
 #' @examples
 #' data(exampleMAS5)
-#' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0", targetValue=500)
+#' myData <- setNormalizationMethod(exampleMAS5, 'MAS5.0', targetValue=500)
 #' results <- runClassifier('EMC92', myData)
 #' getScores( results )
 #' getClassifications( results )
-setGeneric("getScores",
-    function(object){
-        standardGeneric ("getScores")
-    })
+setGeneric("getScores", function(object) {
+    standardGeneric("getScores")
+})
 
-##############################################################
+############################################################## 
 #' Obtain classifier classifications.
 #'
 #' \code{getClassifications} returns the resulting classifications.
@@ -63,28 +59,25 @@ setGeneric("getScores",
 #' @rdname getClassifications-methods
 #'
 #' @examples
-#' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0",targetValue=500)
+#' myData <- setNormalizationMethod(exampleMAS5, 'MAS5.0',targetValue=500)
 #' results <- runClassifier('EMC92', myData)
 #' getScores( results )
 #' getClassifications( results )
-setGeneric("getClassifications",
-    function(object){
-        standardGeneric ("getClassifications")
+setGeneric("getClassifications", function(object) {
+    standardGeneric("getClassifications")
 })
 
-setGeneric("runProcess",
-    function(object,expressionMat){
-        standardGeneric ("runProcess")
+setGeneric("runProcess", function(object, expressionMat) {
+    standardGeneric("runProcess")
 })
 
-setGeneric("getValues",
-    function(object){
-        standardGeneric ("getValues")
+setGeneric("getValues", function(object) {
+    standardGeneric("getValues")
 })
 
 
 
-##############################################################
+############################################################## 
 #' Obtain the batch correction status for a classifier result.
 #'
 #' \code{getBatchCorrection} returns TRUE or FALSE
@@ -102,15 +95,14 @@ setGeneric("getValues",
 #' @rdname getBatchCorrection-methods
 #'
 #' @examples
-#' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0",targetValue=500)
+#' myData <- setNormalizationMethod(exampleMAS5, 'MAS5.0',targetValue=500)
 #' results <- runClassifier('EMC92', myData)
 #' getBatchCorrection( results )
-setGeneric("getBatchCorrection",
-    function(object){
-        standardGeneric ("getBatchCorrection")
+setGeneric("getBatchCorrection", function(object) {
+    standardGeneric("getBatchCorrection")
 })
 
-##############################################################
+############################################################## 
 #' Obtain the weighting type used to obtain a classifier result.
 #'
 #' \code{getWeightingType} returns weigthing type 
@@ -119,7 +111,7 @@ setGeneric("getBatchCorrection",
 #' @param object An object of class \code{\link{ClassifierResults}}
 #' as returned by \code{\link{runClassifier}}
 #'
-#' @return \code{complete} or \code{reweighted}
+#' @return one of the values in \code{getWeightingTypes()}
 #'
 #' @family classifier results
 #'
@@ -128,17 +120,17 @@ setGeneric("getBatchCorrection",
 #' @rdname getWeightingType-methods
 #'
 #' @examples
-#' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0",targetValue=500)
+#' myData <- setNormalizationMethod(exampleMAS5, 'MAS5.0',targetValue=500)
 #' results <- runClassifier('EMC92', myData)
 #' getWeightingType( results )
-setGeneric("getWeightingType",
-    function(object ){
-        standardGeneric ("getWeightingType")
+
+setGeneric("getWeightingType", function(object) {
+    standardGeneric("getWeightingType")
 })
 
 
 
-##############################################################
+############################################################## 
 #' Obtain object names.
 #'
 #' \code{getName} returns the name associated with the requested object.
@@ -155,27 +147,24 @@ setGeneric("getWeightingType",
 #' @rdname getName-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getName( aClassifier )
-setGeneric("getName",
-    function(object){
-        standardGeneric ("getName")
+setGeneric("getName", function(object) {
+    standardGeneric("getName")
 })
 
-setGeneric("explicitlyChangeExprs<-",
-    function(object,value){
-        standardGeneric ("explicitlyChangeExprs<-")
+setGeneric("explicitlyChangeExprs<-", function(object, value) {
+    standardGeneric("explicitlyChangeExprs<-")
 })
 
-setGeneric("getExpressionEnvironment",
-    function(object,value){
-        standardGeneric ("getExpressionEnvironment")
+setGeneric("getExpressionEnvironment", function(object, value) {
+    standardGeneric("getExpressionEnvironment")
 })
 
-##############################################################
+############################################################## 
 #' Obtain normalization method
 #'
-#' \code{getNormalizationMethod} returns the normalization method
+#' The function \code{getNormalizationMethod} returns the normalization method
 #' associated with the object
 #'
 #' @param object An object of class \code{\link{FixedExpressionData}} or
@@ -193,16 +182,15 @@ setGeneric("getExpressionEnvironment",
 #'
 #' @examples
 #' data(exampleMAS5)
-#' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0", targetValue=500)
-#' aClassifier <- getClassifier("EMC92")
+#' myData <- setNormalizationMethod(exampleMAS5, 'MAS5.0', targetValue=500)
+#' aClassifier <- getClassifier('EMC92')
 #' getNormalizationMethod( myData )
 #' getNormalizationMethod( aClassifier )
-setGeneric("getNormalizationMethod",
-    function(object){
-        standardGeneric ("getNormalizationMethod")
+setGeneric("getNormalizationMethod", function(object) {
+    standardGeneric("getNormalizationMethod")
 })
 
-##############################################################
+############################################################## 
 #' Obtain the targetValue
 #'
 #' \code{getTargetValue} returns the current applied targetValue
@@ -220,21 +208,37 @@ setGeneric("getNormalizationMethod",
 #'
 #' @examples
 #' data(exampleMAS5)
-#' myData <- setNormalizationMethod(exampleMAS5, "MAS5.0", targetValue=500)
+#' myData <- setNormalizationMethod(exampleMAS5, 'MAS5.0', targetValue=500)
 #' getTargetValue( myData )
+setGeneric("getTargetValue", function(object) {
+    standardGeneric("getTargetValue")
+})
 
-setGeneric("getTargetValue",function(object){standardGeneric ("getTargetValue")})
-setGeneric("setTargetValue<-",function(object,value){standardGeneric ("setTargetValue<-")})
+setGeneric("setTargetValue<-", function(object, value) {
+    standardGeneric("setTargetValue<-")
+})
 
-setGeneric("rawExprs",function(object){standardGeneric ("rawExprs")})
+setGeneric("rawExprs", function(object) {
+    standardGeneric("rawExprs")
+})
 
-setGeneric("addTransformationProcess",function(object,name,values,...){standardGeneric ("addTransformationProcess")})
-setGeneric("getTransformationProcesses",function(object){standardGeneric ("getTransformationProcesses")})
-setGeneric("removeTransformationProcesses",function(object,n){standardGeneric ("removeTransformationProcesses")})
+setGeneric("addTransformationProcess", function(object, name, values, ...) {
+    standardGeneric("addTransformationProcess")
+})
 
-setGeneric("getNormalizationParameters",function(object){standardGeneric ("getNormalizationParameters")})
+setGeneric("getTransformationProcesses", function(object) {
+    standardGeneric("getTransformationProcesses")
+})
 
-##############################################################
+setGeneric("removeTransformationProcesses", function(object, n) {
+    standardGeneric("removeTransformationProcesses")
+})
+
+setGeneric("getNormalizationParameters", function(object) {
+    standardGeneric("getNormalizationParameters")
+})
+
+############################################################## 
 #' Obtain a classifier definition.
 #'
 #' \code{getClassifier} returns a requested classifier definition.
@@ -257,10 +261,12 @@ setGeneric("getNormalizationParameters",function(object){standardGeneric ("getNo
 #' @rdname getClassifier-methods
 #'
 #' @examples
-#' getClassifier("EMC92")
-setGeneric("getClassifier",function(value){standardGeneric ("getClassifier")})
+#' getClassifier('EMC92')
+setGeneric("getClassifier", function(value) {
+    standardGeneric("getClassifier")
+})
 
-##############################################################
+############################################################## 
 #' Obtain probe-set names.
 #'
 #' \code{getProbeNames} returns the probe names associated with
@@ -279,11 +285,13 @@ setGeneric("getClassifier",function(value){standardGeneric ("getClassifier")})
 #' @rdname getProbeNames-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getProbeNames( aClassifier )
-setGeneric("getProbeNames",function(object){standardGeneric ("getProbeNames")})
+setGeneric("getProbeNames", function(object) {
+    standardGeneric("getProbeNames")
+})
 
-##############################################################
+############################################################## 
 #' Obtain classifier weights.
 #'
 #' \code{getWeights} returns the probe weights associated with
@@ -301,11 +309,13 @@ setGeneric("getProbeNames",function(object){standardGeneric ("getProbeNames")})
 #' @rdname getWeights-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getWeights(aClassifier)
-setGeneric("getWeights",function(object){standardGeneric ("getWeights")})
+setGeneric("getWeights", function(object) {
+    standardGeneric("getWeights")
+})
 
-##############################################################
+############################################################## 
 #' Obtain classifier training data.
 #'
 #' \code{getTrainingData} returns the training data that was used
@@ -323,11 +333,13 @@ setGeneric("getWeights",function(object){standardGeneric ("getWeights")})
 #' @rdname getTrainingData-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getTrainingData(aClassifier)
-setGeneric("getTrainingData",function(object){standardGeneric ("getTrainingData")})
+setGeneric("getTrainingData", function(object) {
+    standardGeneric("getTrainingData")
+})
 
-##############################################################
+############################################################## 
 #' Obtain citations to the classifier
 #'
 #' \code{getCitations} Obtain citations to the classifier
@@ -344,12 +356,14 @@ setGeneric("getTrainingData",function(object){standardGeneric ("getTrainingData"
 #' @rdname getCitations-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getCitations(aClassifier)
-setGeneric("getCitations",function(object){standardGeneric ("getCitations")})
+setGeneric("getCitations", function(object) {
+    standardGeneric("getCitations")
+})
 
 
-##############################################################
+############################################################## 
 #' Obtain the decision boundaries defined for the classifier.
 #'
 #' \code{getDecisionBoundaries} returns the a numeric vector
@@ -367,12 +381,14 @@ setGeneric("getCitations",function(object){standardGeneric ("getCitations")})
 #' @rdname getDecisionBoundaries-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getDecisionBoundaries(aClassifier)
-setGeneric("getDecisionBoundaries",function(object ){standardGeneric ("getDecisionBoundaries")})
+setGeneric("getDecisionBoundaries", function(object) {
+    standardGeneric("getDecisionBoundaries")
+})
 
 
-##############################################################
+############################################################## 
 #' Obtain classifiers' intercept.
 #'
 #' \code{getIntercept} returns the numeric value of the
@@ -390,11 +406,13 @@ setGeneric("getDecisionBoundaries",function(object ){standardGeneric ("getDecisi
 #' @rdname getIntercept-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getIntercept(aClassifier)
-setGeneric("getIntercept",function(object){standardGeneric ("getIntercept")})
+setGeneric("getIntercept", function(object) {
+    standardGeneric("getIntercept")
+})
 
-##############################################################
+############################################################## 
 #' Obtain classifiers' description.
 #'
 #' \code{getDescription} returns the descriptive text associated
@@ -412,11 +430,13 @@ setGeneric("getIntercept",function(object){standardGeneric ("getIntercept")})
 #' @rdname getDescription-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getDescription(aClassifier)
-setGeneric("getDescription",function(object ){standardGeneric ("getDescription")})
+setGeneric("getDescription", function(object) {
+    standardGeneric("getDescription")
+})
 
-##############################################################
+############################################################## 
 #' Perform classification.
 #'
 #' \code{runClassifier} performs classification by applying a
@@ -449,7 +469,7 @@ setGeneric("getDescription",function(object ){standardGeneric ("getDescription")
 #' to the \code{runClassifier} function in order to determine the
 #' classifier outcome using less probe-sets (e.g. possible if the
 #' missing probe-sets are known to have minimal contribution).See
-#' \code{vignette("MissingCovariates")} for more information. If
+#' \code{vignette('MissingCovariates')} for more information. If
 #' the input data has a small number of samples, the default batch
 #' correction becomes ineffective. If you are aware of the possible
 #' negative effects you can force to not use batch correction by
@@ -463,11 +483,13 @@ setGeneric("getDescription",function(object ){standardGeneric ("getDescription")
 #'
 #' @examples
 #' data(exampleMAS5)
-#' myData<-setNormalizationMethod(exampleMAS5,"MAS5.0",targetValue=500)
-#' runClassifier("EMC92",myData)
-setGeneric("runClassifier",function(classifierParameters, fixedExpressionData,... ){standardGeneric ("runClassifier")})
+#' myData<-setNormalizationMethod(exampleMAS5,'MAS5.0',targetValue=500)
+#' runClassifier('EMC92',myData)
+setGeneric("runClassifier", function(classifierParameters, fixedExpressionData, ...) {
+    standardGeneric("runClassifier")
+})
 
-##############################################################
+############################################################## 
 #' Obtain classifiers' reference means.
 #'
 #' \code{getMeans} returns the reference means encoded in the
@@ -488,11 +510,13 @@ setGeneric("runClassifier",function(classifierParameters, fixedExpressionData,..
 #' @rdname getMeans-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getMeans(aClassifier)
-setGeneric("getMeans",function(object ){standardGeneric ("getMeans")})
+setGeneric("getMeans", function(object) {
+    standardGeneric("getMeans")
+})
 
-##############################################################
+############################################################## 
 #' Obtain classifiers' reference standard deviations.
 #'
 #' \code{getSds} returns the reference standard deviations
@@ -513,13 +537,17 @@ setGeneric("getMeans",function(object ){standardGeneric ("getMeans")})
 #' @rdname getSds-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getSds(aClassifier)
-setGeneric("getSds",function(object ){standardGeneric ("getSds")})
+setGeneric("getSds", function(object) {
+    standardGeneric("getSds")
+})
 
-setGeneric("getDoRun",function(object ){standardGeneric ("getDoRun")})
+setGeneric("getDoRun", function(object) {
+    standardGeneric("getDoRun")
+})
 
-##############################################################
+############################################################## 
 #' Obtain classifiers' event chain.
 #'
 #' \code{getEventChain} returns the event chain encoded in the
@@ -542,10 +570,16 @@ setGeneric("getDoRun",function(object ){standardGeneric ("getDoRun")})
 #' @rdname getEventChain-methods
 #'
 #' @examples
-#' aClassifier <- getClassifier("EMC92")
+#' aClassifier <- getClassifier('EMC92')
 #' getEventChain(aClassifier)
-setGeneric("getEventChain",function(object ){standardGeneric ("getEventChain")})
+setGeneric("getEventChain", function(object) {
+    standardGeneric("getEventChain")
+})
 
-setGeneric("reWeightClassifier",function(object,fixedExpressionData){standardGeneric ("reWeightClassifier")})
+setGeneric("reWeightClassifier", function(object, fixedExpressionData) {
+    standardGeneric("reWeightClassifier")
+})
 
-setGeneric("hasTrainingData",function(object){standardGeneric ("hasTrainingData")})
+setGeneric("hasTrainingData", function(object) {
+    standardGeneric("hasTrainingData")
+})

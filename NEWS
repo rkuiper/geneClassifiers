@@ -1,3 +1,8 @@
+version 1.9.0
+    o Bugfix: Added signature( "FixedExpressionData", i=ANY, j=missing ) for the "[" and "[[" functions
+    o More indepth checking of function arguments
+    o Additional unit tests 
+
 version 1.0.0
 
     o The first publically available version of the geneClassifiers package. This packages currently contains a number of gene classifiers relating to survival in Multiple Myeloma. 

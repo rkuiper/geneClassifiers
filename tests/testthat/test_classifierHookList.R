@@ -5,7 +5,7 @@ test_that("returns ClassifierParameters Object",{
         inherits(x(FALSE),"ClassifierParameters")
     })
 
-    allOK<-all(isClassifierParametersObject)
+    allOK<-all(unlist(isClassifierParametersObject))
     expect_true(allOK)
 })
 
@@ -54,11 +54,14 @@ test_that("classifierHookList normalizationMethodCorrect",{
     expect_true(allOK)
 })
 
-#** Test classifier retrieval
-
-
-
-
+test_that("classifierHookList namesDuplicated",{
+    registeredClassifiers<-lapply(.classifierHookList,function(x){x()})
+    namesDuplicated<-duplicated(unlist(lapply(registeredClassifiers,function(x){
+        x["name"]
+    })))
+    allOK<-!any(namesDuplicated)
+    expect_true(allOK)
+})
 
 allowedKeyWords<-c("targetValue","truncate","to.log","allow.reweighted","to.meancentering","to.unitvariance","to.referencemeanvar")
 ##Loop through all classifiers
@@ -199,18 +202,5 @@ lapply(.classifierHookList,function(x){
     }
 })
  
-
-
-test_that("classifierHookList namesDuplicated",{
-    registeredClassifiers<-lapply(.classifierHookList,function(x){x()})
-    namesDuplicated<-duplicated(unlist(lapply(registeredClassifiers,function(x){
-        x["name"]
-    })))
-    allOK<-!any(namesDuplicated)
-    expect_true(allOK)
-})
-
-
-
 
 

@@ -2,20 +2,23 @@ Package: geneClassifiers
 Type: Package
 Title: Application of gene classifiers
 Version: 1.9.0
-Date: 2017-12-11
-Author: R Kuiper
-Maintainer: R Kuiper <r.kuiper.emc@gmail.com>
+Authors@R: c(
+    person("R","Kuiper",email="r.kuiper.emc@gmail.com",role=c("cre","aut"),comment = c(ORCID = "0000-0002-3703-1762"))
+    )
 Description: This packages aims for easy accessible application of
         classifiers which have been published in literature using an
         ExpressionSet as input.
+URL: https://doi.org/doi:10.18129/B9.bioc.geneClassifiers
+BugReports: https://github.com/rkuiper/geneClassifiers/issues
 License: GPL-2
 biocViews: GeneExpression, BiomedicalInformatics, Classification,
         Survival, Microarray
 LazyData: true
 Suggests: testthat
-Depends: utils
-Imports: methods, stats, Biobase, BiocGenerics
+Depends: R (>= 3.6.0)
+Imports: utils, methods, stats, Biobase, BiocGenerics
 Collate: aaa.R allGenericFunctions.R Class_TransformationProcess.R
         Class_FixedExpressionData.R Class_ClassifierParameters.R
-        Class_ClassifierResults.R zzz.R
-RoxygenNote: 5.0.1
+        Class_ClassifierResults.R zzz.R geneClassifiers.R
+RoxygenNote: 6.1.1
+Encoding: UTF-8

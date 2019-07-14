@@ -24,8 +24,8 @@ dim(myData)
 dim(myData[1:10,1:3])
 }
 \seealso{
-Other fixed data information extraction functions: \code{\link{[,FixedExpressionData-method}},
+Other fixed data information extraction functions: \code{\link{[,FixedExpressionData,ANY,ANY-method}},
   \code{\link{getNormalizationMethod}},
   \code{\link{getTargetValue}}
 }
-
+\concept{fixed data information extraction functions}

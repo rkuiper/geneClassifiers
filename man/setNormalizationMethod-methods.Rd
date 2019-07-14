@@ -48,4 +48,4 @@ Other workflow functions: \code{\link{getNormalizationMethod}},
   \code{\link{runClassifier}},
   \code{\link{showClassifierList}}
 }
-
+\concept{workflow functions}
