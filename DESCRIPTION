@@ -1,7 +1,7 @@
 Package: geneClassifiers
 Type: Package
 Title: Application of gene classifiers
-Version: 1.9.0
+Version: 1.9.1
 Authors@R: c(
     person("R","Kuiper",email="r.kuiper.emc@gmail.com",role=c("cre","aut"),comment = c(ORCID = "0000-0002-3703-1762"))
     )
